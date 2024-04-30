@@ -16,14 +16,14 @@
 {% endblock %}
 
 {% block content %}
-  <div class="card mb-3 w-100" style="max-width: 640px;">
+  <div class="card my-5 w-100 mx-auto" style="max-width: 640px;">
     <div class="card-header">
       <ul class="nav nav-tabs nav-fill card-header-tabs">
         <li class="nav-item">
           <a class="nav-link active disabled" aria-current="true" href="#">Profile</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Update</a>
+          <a class="nav-link" href="{% url 'user-account-update' %}">Update</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">Change Password</a>

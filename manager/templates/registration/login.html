@@ -16,23 +16,25 @@
 {% endblock %}
 
 {% block content %}
-
-  {% if user.is_authenticated %}
-    <form action="{%url 'logout' %}" method="post">
-      <p>You are already logged in as <strong> {{ user.username }} </strong></p>
+  <div class="content-center">
+    {% if user.is_authenticated %}
+      <form action="{%url 'logout' %}" method="post">
+        <p>You are already logged in as <strong> {{ user.username }} </strong></p>
+        {% csrf_token %}
+        <button type="submit" class="btn btn-sm btn-danger">Logout</button>
+    </form>
+    {% else %}
+    <form action="{% url "login" %}" method="post" class="form">
       {% csrf_token %}
-      <button type="submit" class="btn btn-sm btn-danger">Logout</button>
-  </form>
-  {% else %}
-  <form action="{% url "login" %}" method="post" class="form">
-    {% csrf_token %}
 
-    {% bootstrap_form form %}
+      {% bootstrap_form form %}
 
-    {% bootstrap_button button_type='submit' content='Login' %}
-    {% bootstrap_button button_type='reset' content='Clear' class="secondary" %}
-    <br /> 
-    <a href="{% url 'password_reset' %}">Forgot Password?</a>
-  </form>
-  {% endif %}
+      {% bootstrap_button button_type='submit' content='Login' %}
+      {% bootstrap_button button_type='reset' content='Clear' class="secondary" %}
+      <br /> 
+      <br /> 
+      <a href="{% url 'password_reset' %}">Forgot Password?</a>
+    </form>
+    {% endif %}
+  </div>
 {% endblock %}

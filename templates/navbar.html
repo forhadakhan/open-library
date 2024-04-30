@@ -22,14 +22,14 @@
           </div>
         </li>
         <li class="nav-item border {% if active_page == 'home' %} disable-option {% else %} nav-option {% endif %}">
-          <a class="nav-link mx-2" href="{% url 'index' %}">Home</a>
+          <a class="nav-link px-3" href="{% url 'index' %}">Home</a>
         </li>
         <li class="nav-item border {% if active_page == 'catalogue' %} disable-option {% else %} nav-option {% endif %}">
-          <a class="nav-link mx-2" href="{% url 'catalogue' %}">Catalogue</a>
+          <a class="nav-link px-3" href="{% url 'catalogue' %}">Catalogue</a>
         </li>
         {% if user.is_authenticated %}
-          <li class="nav-item border {% if active_page == 'login' %} disable-option {% else %} nav-option {% endif %}">
-            <a class="nav-link mx-2" href="{% url 'user-account' %}">Account</a>
+          <li class="nav-item border {% if active_page == 'account' %} disable-option {% else %} nav-option {% endif %}">
+            <a class="nav-link px-3" href="{% url 'user-account' %}">Account</a>
           </li>
           <li class="nav-item border {% if active_page == 'register' %} disable-option {% else %} nav-option {% endif %}">
             <form action="{% url 'logout' %}" method="post">
@@ -39,10 +39,10 @@
           </li>
         {% else %}
           <li class="nav-item border {% if active_page == 'login' %} disable-option {% else %} nav-option {% endif %}">
-            <a class="nav-link mx-2" href="{% url 'login' %}">Login</a>
+            <a class="nav-link px-3" href="{% url 'login' %}">Login</a>
           </li>
           <li class="nav-item border {% if active_page == 'register' %} disable-option {% else %} nav-option {% endif %}">
-            <a class="nav-link mx-2" href="{% url 'register' %}">Register</a>
+            <a class="nav-link px-3" href="{% url 'register' %}">Register</a>
           </li>
         {% endif %}
       </ul>

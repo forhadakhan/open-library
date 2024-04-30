@@ -7,7 +7,7 @@ body {
     background: #fafafa;
 }
 
-main {
+.content-center {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -42,9 +42,9 @@ main {
 
 .disable-option a {
     pointer-events: none;
-    font-weight: bold;
-    color: #99a8c2;
-}
+    background-color: #5ca3fa; 
+    color: azure;
+}   
 
 #bodyContent {
     min-height: calc(100vh - 77px)

@@ -14,15 +14,21 @@
 {% endblock %}
 
 {% block content %}
-  <form action="{% url "register" %}" method="post" class="form">
-    {% csrf_token %}
+  <h1 class="h4 text-center border-bottom pb-4 maintextColor">
+    Register as a new user
+  </h1>
+  <div class="content-center mb-5 py-5">
+    <form action="{% url "register" %}" method="post" class="form textColor">
+      {% csrf_token %}
 
-    {% bootstrap_form form %}
+      {% bootstrap_form form %}
 
-    {% bootstrap_button button_type='submit' content='Register' %}
-    {% bootstrap_button button_type='reset' content='Clear' %}
-    <br /> 
-    <a href="{% url 'login'%}"> Already have an account?</a>
-  </form>
+      {% bootstrap_button button_type='submit' content='Register' %}
+      {% bootstrap_button button_type='reset' content='Clear' %}
+      <br /> 
+      <br /> 
+      <a href="{% url 'login'%}"> Already have an account?</a>
+    </form>
+  </div>
 {% endblock %}
 
