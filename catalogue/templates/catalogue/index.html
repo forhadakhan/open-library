@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load static %}
+{# Load the tag library #}
+{% load django_bootstrap5 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+{% block title %}
+  Login
+{% endblock %}
+
+{% block header %}
+  {% include 'navbar.html' with active_page='catalogue' %}
+{% endblock %}
+
+{% block content %}
+  <h1>Catelogue</h1>
+{% endblock %}
