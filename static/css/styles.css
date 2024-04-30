@@ -1,0 +1,62 @@
+html {
+    height: 100%;
+    font-family: 'Inter', sans-serif;
+}
+
+body {
+    background: #fafafa;
+}
+
+main {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 75vh;
+}
+
+
+.textColor {
+    color: #2a5a94;
+}
+
+#verticalbar {
+    height: 40px;
+    width: 5px;
+    background: #2a5a94;
+}
+
+.iconChange:hover {
+    background: #2a5a94;
+    transition: 1s;
+}
+
+.iconChange:hover a {
+    color: azure !important;
+}
+
+.disable-icon a {
+    pointer-events: none;
+    font-weight: bold;
+    color: #99a8c2;
+}
+
+#bodyContent {
+    min-height: calc(100vh - 77px)
+}
+
+.maintextColor {
+    color: #1C4980;
+}
+
+.horizontalBar {
+    max-width: 200px;
+    height: 5px;
+    background: #4052f2;
+}
+
+.extraSmallFont.active {
+    border-bottom: 2px solid #6195f5
+}
+
+
+  
