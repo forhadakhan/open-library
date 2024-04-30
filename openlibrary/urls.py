@@ -18,11 +18,14 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.shortcuts import redirect
+from django.urls import reverse
 
 urlpatterns = [
     path('~admin/', admin.site.urls),
     path("home/", include("manager.urls")),
     path('', lambda request: redirect('/home')),
+    path('auth/password_change/', lambda request: redirect(reverse('user-account-update-password'))),
+    path('auth/password_change/done/', lambda request: redirect(reverse('user-account-update-password'))),
     path("auth/", include("django.contrib.auth.urls")),
     path("catalogue/", include("catalogue.urls")),
 ]
