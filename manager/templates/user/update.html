@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static %}
+{# Load the tag library #}
+{% load django_bootstrap5 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+{% block title %}
+  Profile - Update 
+{% endblock %}
+
+{% block header %}
+  {% include 'navbar.html' with active_page='account' %}
+{% endblock %}
+
+{% block content %}
+    <div class="card my-5 w-100 mx-auto" style="max-width: 640px;">
+        <div class="card-header">
+        <ul class="nav nav-tabs nav-fill card-header-tabs">
+            <li class="nav-item">
+            <a class="nav-link" href="{% url 'user-account' %}">Profile</a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link active disabled fw-bold textColor" aria-current="true" href="#">Update</a>
+            </li>
+            <li class="nav-item">
+            <a class="nav-link" href="#">Change Password</a>
+            </li>
+        </ul>
+        </div>
+        <div class="row g-0">
+            <form action="{% url 'user-account-update' %}" method="post" class="form textColor p-5">
+                {% csrf_token %}
+                {% bootstrap_form form %}
+                {% comment %} {{ form.as_p }} {% endcomment %}
+                <button type="submit" class="btn btn-primary">Update Profile</button>
+            </form>              
+        </div>
+    </div>
+
+{% endblock %}
