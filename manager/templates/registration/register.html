@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load static %}
+{# Load the tag library #}
+{% load django_bootstrap5 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+{%block title%}Register{%endblock%}
+
+{% block header %}
+  {% include 'navbar.html' with active_page='register' %}
+{% endblock %}
+
+{% block content %}
+  <form action="{% url "register" %}" method="post" class="form">
+    {% csrf_token %}
+
+    {% bootstrap_form form %}
+
+    {% bootstrap_button button_type='submit' content='Register' %}
+    {% bootstrap_button button_type='reset' content='Clear' %}
+    <br /> 
+    <a href="{% url 'login'%}"> Already have an account?</a>
+  </form>
+{% endblock %}
+
