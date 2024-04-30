@@ -7,11 +7,11 @@ from django.shortcuts import redirect, render
 
 class RegistrationForm(UserCreationForm):
     email = forms.EmailField(required=True)
-    name = forms.CharField(required=True)
+    first_name = forms.CharField(required=True)
 
     class Meta:
         model = User
-        fields = ["name", "username", "email", "password1", "password2"]
+        fields = ["first_name", "last_name", "username", "email", "password1", "password2"]
 
 
 def registration_view(request):
@@ -25,6 +25,10 @@ def registration_view(request):
         form = RegistrationForm()
 
     return render(request, "registration/register.html", {"form": form})
+
+
+def account_view(request):
+    return render(request, "user/account.html")
 
 
 def index(request):

@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load static %}
+{# Load the tag library #}
+{% load django_bootstrap5 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+{% block title %}
+  Profile
+{% endblock %}
+
+{% block header %}
+  {% include 'navbar.html' with active_page='account' %}
+{% endblock %}
+
+{% block content %}
+  <div class="card mb-3 w-100" style="max-width: 640px;">
+    <div class="card-header">
+      <ul class="nav nav-tabs nav-fill card-header-tabs">
+        <li class="nav-item">
+          <a class="nav-link active disabled" aria-current="true" href="#">Profile</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Update</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Change Password</a>
+        </li>
+      </ul>
+    </div>
+    <div class="row g-0">
+      <div class="col-md-4">
+        {% if user.is_staff %}
+          <img src="{% static 'images/profile-super.webp' %}" class="img-fluid rounded-start" alt="..." />
+        {% else %}
+          <img src="{% static 'images/profile-active.webp' %}" class="img-fluid rounded-start" alt="..." />
+        {% endif %}
+      </div>
+      <div class="col-md-8">
+        <div class="card-body py-5">
+          <h5 class="card-title">{{ user.first_name }} {{ user.last_name }}</h5>
+          <h6 class="card-subtitle mb-2 text-body-secondary">Username: {{ user.username }}</h6>
+          <p class="card-text">Email: {{ user.email }}</p>
+          <p class="card-text">
+            <small class="text-body-secondary">Member since {{ user.date_joined }}</small>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
