@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block header %}
+  {% include 'navbar.html' with active_page='404' %}
+{% endblock %}
+
+{% block content %}
+  <div class="content-center">
+    <div id="" class="d-flex align-items-center">
+      <div class="row align-items-center">
+        <div class="col-12 col-lg-6 text-lg-center">
+          <div class="p-2 text-center">
+            <img class="w-100" src="{% static 'images/404.webp' %}" alt="library-illustrator" />
+          </div>
+        </div>
+        <div class="col-12 col-lg-6">
+          <div class="px-5">
+            <span class="badge rounded-pill text-bg-warning mb-3">Wrong Address/URL</span>
+            <p class="display-6 fs-3 maintextColor">You're slightly off course, but still in</p>
+            <h1 class="fw-bolder display-4 maintextColor">the right universe.</h1>
+            <div class="horizontalBar my-4"></div>
+            <p class="maintextColor fw-medium">Explore your surroundings, and you'll uncover the perfect sources to enlighten yourself.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
