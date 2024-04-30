@@ -16,6 +16,14 @@
 {% endblock %}
 
 {% block content %}
+
+  {% if user.is_authenticated %}
+    <form action="{%url 'logout' %}" method="post">
+      <p>You are already logged in as <strong> {{ user.username }} </strong></p>
+      {% csrf_token %}
+      <button type="submit" class="btn btn-sm btn-danger">Logout</button>
+  </form>
+  {% else %}
   <form action="{% url "login" %}" method="post" class="form">
     {% csrf_token %}
 
@@ -26,4 +34,5 @@
     <br /> 
     <a href="{% url 'password_reset' %}">Forgot Password?</a>
   </form>
+  {% endif %}
 {% endblock %}
