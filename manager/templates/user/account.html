@@ -32,10 +32,12 @@
     </div>
     <div class="row g-0">
       <div class="col-md-4">
-        {% if user.is_staff %}
-          <img src="{% static 'images/profile-super.webp' %}" class="img-fluid rounded-start" alt="..." />
+        {% if user.is_superuser %}
+          <img src="{% static 'images/profile-super.webp' %}" class="img-fluid rounded-start" alt="super-user" />
+        {% elif user.is_staff %}
+          <img src="{% static 'images/profile-staff.webp' %}" class="img-fluid rounded-start" alt="staff-profile" />
         {% else %}
-          <img src="{% static 'images/profile-active.webp' %}" class="img-fluid rounded-start" alt="..." />
+          <img src="{% static 'images/profile.webp' %}" class="img-fluid rounded-start" alt="member-profile" />
         {% endif %}
       </div>
       <div class="col-md-8">
