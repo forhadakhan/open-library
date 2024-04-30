@@ -39,6 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # Third party apps
     'django_bootstrap5',
+    # Local apps
+    'manager',
+    'catalogue',
 ]
 
 MIDDLEWARE = [
