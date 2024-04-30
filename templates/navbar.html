@@ -1,0 +1,39 @@
+{% load static %}
+
+<nav class="navbar navbar-expand-lg p-0 m-0 py-4 mb-4 border-bottom">
+  <div class="container-fluid">
+    <div class="d-flex align-items-center navbar-brand" id="logo">
+      <a href="{% url 'index' %}" class="nav-link textColor brand d-lg-inline-block">
+        <span class="h1 fw-light">Open</span>
+        <span class="h1 d-lg-inline-block">Library</span>
+      </a>
+    </div>
+    <button class="navbar-toggler mb-sm-5" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+      <ul class="navbar-nav ms-auto gap-2" aria-current="true" >
+        <li>
+          <span class="p-5 d-lg-none"></span>
+        </li>
+        <li class="nav-item">
+          <div class="input-group">
+            <input type="search" class="form-control p-2" placeholder="Search Book" aria-label="Search" />
+            <button class="btn border input-group-text"><img class="searchImg iconCursor" src="{% static 'icons/search.svg' %}" alt="search" /></button>
+          </div>
+        </li>
+        <li class="nav-item border rounded-2 {% if active_page == 'home'%}disable-icon{% else %}iconChange{% endif %}">
+          <a class="nav-link mx-2" href="{% url 'index' %}">Home</a>
+        </li>
+        <li class="nav-item border rounded-2 {% if active_page == 'catalogue'%}disable-icon{% else %}iconChange{% endif %}">
+          <a class="nav-link mx-2" href="{% url 'catalogue' %}">Catalogue</a>
+        </li>
+        <li class="nav-item border rounded-2 {% if active_page == 'login'%}disable-icon{% else %}iconChange{% endif %}">
+          <a class="nav-link mx-2" href="{% url 'login' %}">Login</a>
+        </li>
+        <li class="nav-item border rounded-2 {% if active_page == 'register'%}disable-icon{% else %}iconChange{% endif %}">
+          <a class="nav-link mx-2" href="{% url 'register' %}">Register</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
