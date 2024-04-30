@@ -25,16 +25,22 @@ main {
     background: #2a5a94;
 }
 
-.iconChange:hover {
+.nav-option:hover {
     background: #2a5a94;
     transition: 1s;
 }
 
-.iconChange:hover a {
+.nav-option:hover a {
     color: azure !important;
 }
 
-.disable-icon a {
+.nav-option:hover button {
+    background: #bd2222;
+    transition: 1s;
+    color: azure !important;
+}
+
+.disable-option a {
     pointer-events: none;
     font-weight: bold;
     color: #99a8c2;
