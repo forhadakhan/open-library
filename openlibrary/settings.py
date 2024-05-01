@@ -11,6 +11,14 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+from dotenv import load_dotenv
+import os
+
+# Load environment variables from .env file
+load_dotenv()
+
+# Secret key
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -19,8 +27,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-jv!bmuuz35=&m2f3hc)s$^fw7e=q0(@wzze!)g-#2ds)2@b#t7'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -39,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # Third party apps
     'django_bootstrap5',
+    'cloudinary',
     # Local apps
     'manager',
     'catalogue',
@@ -140,3 +147,12 @@ LOGIN_REDIRECT_URL = "/"
 LOGOUT_URL = "/auth/logout"
 LOGOUT_REDIRECT_URL = "/"
 
+
+# Cloudinary configuration
+import cloudinary
+          
+cloudinary.config( 
+  cloud_name = os.getenv('CLOUDINARY_CLOUD_NAME'), 
+  api_key = os.getenv('CLOUDINARY_API_KEY'), 
+  api_secret =  os.getenv('CLOUDINARY_API_SECRET'),
+)
