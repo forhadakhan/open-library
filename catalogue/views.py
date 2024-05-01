@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.core.paginator import Paginator
@@ -9,6 +10,8 @@ def catalogue(request):
     return render(request, "catalogue/index.html")
 
 
+@login_required
+@user_passes_test(lambda u: u.is_staff or u.is_superuser, login_url='/home/user/restricted/')
 def add_book(request):
     if request.method == 'POST':
         form = BookForm(request.POST, request.FILES)
@@ -20,7 +23,9 @@ def add_book(request):
             messages.error(request, 'Failed to add book.')
     else:
         form = BookForm()
+
     return render(request, 'catalogue/book_add.html', {'form': form})
+
 
 
 def all_books(request):
