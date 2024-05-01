@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.core.paginator import Paginator
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from .forms import *
 
 # Create your views here.
@@ -32,3 +32,7 @@ def all_books(request):
     
     return render(request, 'catalogue/books.html', {'page_obj': page_obj})
 
+
+def book_detail(request, book_id):
+    book = get_object_or_404(Book, pk=book_id)
+    return render(request, 'catalogue/book_detail.html', {'book': book})

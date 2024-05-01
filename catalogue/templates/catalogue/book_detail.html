@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load static %}
+{# Load the tag library #}
+{% load django_bootstrap5 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+{% block title %}
+  {{ book.title }}
+{% endblock %}
+
+{% block header %}
+  {% include 'navbar.html' with active_page='catalogue' %}
+{% endblock %}
+
+{% block content %}
+  <div class="container mt-4">
+    <div class="card mb-3">
+      <div class="row no-gutters">
+        <div class="col-sm-4 col-md-3">
+          <div class="card-img rounded p-2 w-100 mx-auto">
+            {% load cloudinary %}
+            {% cloudinary book.cover_image format='jpg' width=200 height=320 crop='pad' %}
+          </div>
+        </div>
+        <div class="col-sm-8 col-md-9">
+          <div class="card-body">
+            <h5 class="card-title display-6">{{ book.title }}</h5>
+            <p>
+              <strong>Author:</strong> {{ book.author }}
+            </p>
+            <p>
+              <strong>Genre:</strong> {{ book.genre }}
+            </p>
+            <p>
+              <strong>Description:</strong> {{ book.description }}
+            </p>
+            <p>
+              <strong>Publication Date:</strong> {{ book.publication_date }}
+            </p>
+            <p>
+              <strong>ISBN:</strong> {{ book.isbn }}
+            </p>
+            <p>
+              <strong>Added on:</strong> {{ book.upload_date }}
+            </p>
+            <!-- Add more book details here if needed -->
+            <a href="{% url 'all_books' %}" class="btn btn-secondary">Back to All Books</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
