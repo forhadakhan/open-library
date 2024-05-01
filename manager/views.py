@@ -72,3 +72,6 @@ def account_view(request):
 
 def index(request):
     return render(request, "index.html")
+
+def restricted(request):
+    return render(request, "restricted.html")

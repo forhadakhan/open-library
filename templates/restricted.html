@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block header %}
+  {% include 'navbar.html' with active_page='404' %}
+{% endblock %}
+
+{% block content %}
+  <div class="content-center">
+    <div id="" class="d-flex align-items-center">
+      <div class="row align-items-center">
+        <div class="col-12 col-lg-6 text-lg-center">
+          <div class="p-2 text-center">
+            <img class="w-100" src="{% static 'images/limitation.webp' %}" alt="restricted-illustrator" />
+          </div>
+        </div>
+        <div class="col-12 col-lg-6">
+          <div class="px-5">
+            <p class="display-6 fs-3 maintextColor">Restricted</p>
+            <h1 class="fw-bolder display-5 maintextColor">Well, there are lines you won't cross.</h1>
+            <div class="horizontalBar my-4"></div>
+            <p class="maintextColor fw-medium">If you think this is a mistake, contact the admin.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
