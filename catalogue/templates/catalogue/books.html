@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load static %}  
+{# Load the tag library #}
+{% load django_bootstrap5 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+ 
+
+
+{% block title %}
+  All Books
+{% endblock %}
+
+{% block header %}
+  {% include 'navbar.html' with active_page='all-books' %}
+{% endblock %}
+
+{% block content %}
+        
+    <div class="container mt-4">
+        <h1 class="h4 text-center border-bottom mb-4 pb-4 maintextColor">All Books</h1>
+        {% for book in page_obj %}
+            <div class="card mb-3">
+                <div class="row no-gutters">
+                    <div class="col-sm-4 col-md-2">
+                        <div class="card-img rounded p-2 w-100 mx-auto">
+                            {% load cloudinary %}   
+                            {% cloudinary book.cover_image format="jpg" width=110 height=180 crop='pad' %}   
+                        </div>                                             
+                    </div>
+                    <div class="col-sm-8 col-md-10">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ book.title }}</h5>
+                            <p class="card-text"><strong>Author:</strong> {{ book.author }}</p>
+                            <p class="card-text"><strong>ISBN:</strong> {{ book.isbn }}</p>
+                            <a href="{% url 'book_detail' book.id %}" class="btn btn-primary">View Details</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+
+        <!-- Pagination links -->
+        {% if page_obj.has_other_pages %}
+            <div class="d-flex justify-content-center">
+                <ul class="pagination">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item"><a class="page-link" href="?page=1">&laquo; First</a></li>
+                        <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+                    {% endif %}
+                    <li class="page-item active"><span class="page-link">{{ page_obj.number }}</span></li>
+                    {% if page_obj.has_next %}
+                        <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
+                        <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last &raquo;</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
