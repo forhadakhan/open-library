@@ -28,14 +28,24 @@
           <a class="nav-link px-3" href="{% url 'catalogue' %}">Catalogue</a>
         </li>
         {% if user.is_authenticated %}
-          <li class="nav-item border {% if active_page == 'account' %} disable-option {% else %} nav-option {% endif %}">
-            <a class="nav-link px-3" href="{% url 'user-account' %}">Account</a>
-          </li>
-          <li class="nav-item border {% if active_page == 'register' %} disable-option {% else %} nav-option {% endif %}">
-            <form action="{% url 'logout' %}" method="post">
-              {% csrf_token %}
-              <button class="btn rounded-0" type="submit">Log Out</button>
-            </form>
+          <li class="nav-item border-0">
+            <div class="dropdown">
+              <button class="btn dropdown-toggle border rounded-0 w-100 text-left py-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Account 
+              </button>
+              <ul class="dropdown-menu mt-3 w-auto">
+                <li><a class="btn dropdown-item" href="{% url 'user-account' %}">Profile</a></li>
+                <li><a class="btn dropdown-item" href="{% url 'user-account-update' %}">Settings</a></li>
+                <li><a class="btn dropdown-item" href="{% url 'user-account-update-password' %}">Change Password</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li>
+                  <form action="{% url 'logout' %}" method="post" class="w-100">
+                    {% csrf_token %}
+                    <button class="btn text-danger rounded-0 w-100 fw-bold" type="submit">Log Out</button>
+                  </form>
+                </li>
+              </ul>
+            </div>
           </li>
         {% else %}
           <li class="nav-item border {% if active_page == 'login' %} disable-option {% else %} nav-option {% endif %}">

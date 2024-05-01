@@ -34,11 +34,6 @@ body {
     color: azure !important;
 }
 
-.nav-option:hover button {
-    background: #bd2222;
-    transition: 1s;
-    color: azure !important;
-}
 
 .disable-option a {
     pointer-events: none;
