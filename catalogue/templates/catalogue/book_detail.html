@@ -1,84 +1,241 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load static %}
 {# Load the tag library #}
 {% load django_bootstrap5 %}
-
 {# Load CSS and JavaScript #}
 {% bootstrap_css %}
 {% bootstrap_javascript %}
-
 {% block title %}
   {{ book.title }}
-{% endblock %}
-
+{% endblock title %}
+{% block app_js %}
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+{% endblock app_js %}
 {% block header %}
-  {% include 'navbar.html' with active_page='catalogue' %}
-{% endblock %}
-
+  {% include "navbar.html" with active_page="book_detail" %}
+{% endblock header %}
 {% block content %}
   <div class="container mt-4">
-    <div class="my-4">      
+    <div class="my-4">
       <a href="{% url 'all_books' %}" class="btn btn-sm btn-light border">Back to All Books</a>
     </div>
+    {% comment %} Book Details {% endcomment %}
     <div class="card mb-3">
       <div class="row no-gutters">
         <div class="col-sm-4 col-md-3">
-          <div class="card-img rounded p-2 w-100 mx-auto">
-            <div class="book-card__img">              
+          <div class="card-img p-2 w-100 mx-auto">
+            <div>
               {% load cloudinary %}
               {% if book.cover_image %}
-                  {% cloudinary book.cover_image width=200 height=320 %}
+                {% cloudinary book.cover_image width=200 height=320 %}
               {% else %}
-                  <!-- Default placeholder image -->
-                  <img src="{% static 'images/open-library-cover.webp' %}" alt="Open Library Placeholder Cover" style="width: 200px; height: 320px;">
-              {% endif %} 
-          </div>
+                <!-- Default placeholder image -->
+                <img src="{% static "images/open-library-cover.webp" %}" alt="Open Library Placeholder Cover" width=200 height=320 />
+              {% endif %}
+            </div>
           </div>
         </div>
         <div class="col-sm-8 col-md-9">
           <div class="card-body">
-            <h5 class="card-title display-6">{{ book.title }}</h5>
-            <!-- In your Django template -->
+            <h5 class="card-title display-6 fw-bold">
+              {{ book.title }}
+            </h5>
             {% if user.is_authenticated %}
-            {% if is_favorite %}
-            <div class="btn-group my-2">
-              <a href="#" class="btn btn-sm disabled border" aria-current="page"><i class="bi bi-heart-fill"></i></a>
-              <a href="{% url 'remove_favorite_book' book.id %}" class="btn btn-sm btn-outline-danger border">Remove from Favorites</a>
-            </div>
-            {% else %}
+              {% if is_favorite %}
+                <div class="btn-group my-2">
+                  <a href="#" class="btn btn-sm disabled border" aria-current="page"><i class="bi bi-heart-fill"></i></a>
+                  <a href="{% url 'remove_favorite_book' book.id %}"
+                     class="btn btn-sm btn-outline-danger border">Remove from Favorites</a>
+                </div>
+              {% else %}
                 <div class="btn-group my-2">
                   <a href="#" class="btn btn-sm disabled border" aria-current="page"><i class="bi bi-heart"></i></a>
-                  <a href="{% url 'add_favorite_book' book.id %}" class="btn btn-sm btn-outline-primary border">Add to Favorites</a>
+                  <a href="{% url 'add_favorite_book' book.id %}"
+                     class="btn btn-sm btn-outline-primary border">Add to Favorites</a>
                 </div>
-            {% endif %}
+              {% endif %}
             {% else %}
-            <div class="btn-group my-2">
-              <a href="#" class="btn btn-sm disabled border" aria-current="page"><i class="bi bi-heart"></i></a>
-              <a href="{% url 'login' %}" class="btn btn-sm btn-outline-primary border">Add to Favorites</a>
-            </div>
+              <div class="btn-group my-2">
+                <a href="#" class="btn btn-sm disabled border" aria-current="page"><i class="bi bi-heart"></i></a>
+                <a href="{% url 'login' %}"
+                   class="btn btn-sm btn-outline-primary border">Add to Favorites</a>
+              </div>
             {% endif %}
-
-            <p>
-              <strong>Author:</strong> {{ book.author }}
-            </p>
-            <p>
-              <strong>Genre:</strong> {{ book.genre }}
-            </p>
-            <p>
-              <strong>Description:</strong> {{ book.description }}
-            </p>
-            <p>
-              <strong>Publication Date:</strong> {{ book.publication_date }}
-            </p>
-            <p>
-              <strong>ISBN:</strong> {{ book.isbn }}
-            </p>
-            <p>
-              <strong>Added on:</strong> {{ book.upload_date }}
-            </p>
+            <div class="table-responsive">
+              <table class="table border-top my-2">
+                <tbody>
+                  <tr>
+                    <th scope="row" class="col-md-3">
+                      Author
+                    </th>
+                    <td>
+                      {{ book.author }}
+                    </td>
+                  </tr>
+                  <tr>
+                    <th scope="row">
+                      Genre
+                    </th>
+                    <td>
+                      {{ book.genre }}
+                    </td>
+                  </tr>
+                  <tr>
+                    <th scope="row">
+                      Description
+                    </th>
+                    <td>
+                      {{ book.description }}
+                    </td>
+                  </tr>
+                  <tr>
+                    <th scope="row">
+                      Publication Date
+                    </th>
+                    <td>
+                      {{ book.publication_date }}
+                    </td>
+                  </tr>
+                  <tr>
+                    <th scope="row">
+                      ISBN
+                    </th>
+                    <td>
+                      {{ book.isbn }}
+                    </td>
+                  </tr>
+                  <tr>
+                    <th scope="row">
+                      Rating
+                    </th>
+                    <td>
+                      {% if overall_rating %}
+                        {{ overall_rating|floatformat:"1" }}/5
+                      {% else %}
+                        Not Rated
+                      {% endif %}
+                    </td>
+                  </tr>
+                  <tr>
+                    <th scope="row">
+                      Added on
+                    </th>
+                    <td>
+                      {{ book.upload_date }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>
     </div>
+    {% comment %} Reviews {% endcomment %}
+    <div class="border p-3 bg-white rounded my-5 pb-5">
+      <h3 class="py-2 border-bottom mb-4">
+        Reviews
+      </h3>
+      {% comment %} Add Review {% endcomment %}
+      <form action="{% url 'add_review' book.id %}" method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+          <label for="rating" class="form-label fw-bold">
+            Rating (<span id="ratingDisplay">0/5</span>):
+          </label>
+          <div id="rating"
+               class="btn-group form-control d-block border-0 bg-transparent"
+               role="group"
+               aria-label="Basic radio toggle button group">
+            {% for i in rating_range %}
+              <input type="radio"
+                     class="btn-check"
+                     name="rating"
+                     value="{{ i }}"
+                     id="{{ i }}star"
+                     autocomplete="off"
+                     required />
+              <label class="btn btn-warning" for="{{ i }}star">
+                <i class="bi bi-star"></i>
+              </label>
+            {% endfor %}
+          </div>
+        </div>
+        <div class="mb-3">
+          <label for="comment" class="form-label fw-bold">
+            Comment:
+          </label>
+          <textarea name="comment" class="form-control" id="comment" rows="3" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-sm btn-outline-success">
+          Submit Review
+        </button>
+      </form>
+    </div>
+    {% comment %} Existing Reviews {% endcomment %}
+    <div class="container">
+      <div class="row">
+        {% for review in reviews %}
+          <div class="card my-2">
+            <div class="d-flex">
+              <div class="card-header bg-transparent me-auto">
+                <i class="bi bi-person-fill"></i> <strong>{{ review.user.username }}</strong>
+              </div>
+              {% if request.user == review.user or request.user.is_superuser %}
+                <div class="ms-auto">
+                  <form action="{% url 'delete_review' review.id %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-sm btn-outline-danger mt-3">
+                      Delete
+                    </button>
+                  </form>
+                </div>
+              {% endif %}
+            </div>
+            <div class="card-body">
+              <div class="col-md-6">
+                <div class="lc-block d-flex gap-1 py-3">
+                  <i class="bi bi-star{% if review.rating >= 1 %}-fill{% endif %}"></i>
+                  <i class="bi bi-star{% if review.rating >= 2 %}-fill{% endif %}"></i>
+                  <i class="bi bi-star{% if review.rating >= 3 %}-fill{% endif %}"></i>
+                  <i class="bi bi-star{% if review.rating >= 4 %}-fill{% endif %}"></i>
+                  <i class="bi bi-star{% if review.rating == 5 %}-fill{% endif %}"></i>
+                </div>
+                <div class="lc-block mb-4">
+                  <div editable="rich">
+                    <blockquote class="blockquote">
+                      {{ review.comment }}
+                    </blockquote>
+                  </div>
+                </div>
+                <small class="text-secondary">{{ review.created_at }}</small>
+              </div>
+            </div>
+          </div>
+        {% empty %}
+          <p class="py-5">
+            No reviews yet.
+          </p>
+        {% endfor %}
+      </div>
+    </div>
   </div>
-{% endblock %}
+{% endblock content %}
+{% block app_scripts %}
+  <script>
+      $(document).ready(function() {
+          $('.btn-check').change(function() {
+              var rating = parseInt($(this).attr('id').replace('star', ''))
+              $('.btn-warning').each(function(index) {
+                  var starIndex = index + 1
+                  if (starIndex <= rating) {
+                      $(this).html('<i class="bi bi-star-fill"></i>')
+                  } else {
+                      $(this).html('<i class="bi bi-star"></i>')
+                  }
+              })
+              $('#ratingDisplay').text(rating + '/5') // Update the rating display
+          })
+      })
+  </script>
+{% endblock app_scripts %}
