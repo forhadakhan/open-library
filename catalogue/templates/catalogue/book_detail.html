@@ -17,17 +17,47 @@
 
 {% block content %}
   <div class="container mt-4">
+    <div class="my-4">      
+      <a href="{% url 'all_books' %}" class="btn btn-sm btn-light border">Back to All Books</a>
+    </div>
     <div class="card mb-3">
       <div class="row no-gutters">
         <div class="col-sm-4 col-md-3">
           <div class="card-img rounded p-2 w-100 mx-auto">
-            {% load cloudinary %}
-            {% cloudinary book.cover_image format='jpg' width=200 height=320 crop='pad' %}
+            <div class="book-card__img">              
+              {% load cloudinary %}
+              {% if book.cover_image %}
+                  {% cloudinary book.cover_image width=200 height=320 %}
+              {% else %}
+                  <!-- Default placeholder image -->
+                  <img src="{% static 'images/open-library-cover.webp' %}" alt="Open Library Placeholder Cover" style="width: 200px; height: 320px;">
+              {% endif %} 
+          </div>
           </div>
         </div>
         <div class="col-sm-8 col-md-9">
           <div class="card-body">
             <h5 class="card-title display-6">{{ book.title }}</h5>
+            <!-- In your Django template -->
+            {% if user.is_authenticated %}
+            {% if is_favorite %}
+            <div class="btn-group my-2">
+              <a href="#" class="btn btn-sm disabled border" aria-current="page"><i class="bi bi-heart-fill"></i></a>
+              <a href="{% url 'remove_favorite_book' book.id %}" class="btn btn-sm btn-outline-danger border">Remove from Favorites</a>
+            </div>
+            {% else %}
+                <div class="btn-group my-2">
+                  <a href="#" class="btn btn-sm disabled border" aria-current="page"><i class="bi bi-heart"></i></a>
+                  <a href="{% url 'add_favorite_book' book.id %}" class="btn btn-sm btn-outline-primary border">Add to Favorites</a>
+                </div>
+            {% endif %}
+            {% else %}
+            <div class="btn-group my-2">
+              <a href="#" class="btn btn-sm disabled border" aria-current="page"><i class="bi bi-heart"></i></a>
+              <a href="{% url 'login' %}" class="btn btn-sm btn-outline-primary border">Add to Favorites</a>
+            </div>
+            {% endif %}
+
             <p>
               <strong>Author:</strong> {{ book.author }}
             </p>
@@ -46,8 +76,6 @@
             <p>
               <strong>Added on:</strong> {{ book.upload_date }}
             </p>
-            <!-- Add more book details here if needed -->
-            <a href="{% url 'all_books' %}" class="btn btn-secondary">Back to All Books</a>
           </div>
         </div>
       </div>

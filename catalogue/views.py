@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.core.paginator import Paginator
 from django.shortcuts import render, get_object_or_404
+from .models import *
 from .forms import *
 
 # Create your views here.
@@ -40,4 +41,33 @@ def all_books(request):
 
 def book_detail(request, book_id):
     book = get_object_or_404(Book, pk=book_id)
-    return render(request, 'catalogue/book_detail.html', {'book': book})
+    is_favorite = False
+    if request.user.is_authenticated:
+        # Check if the book is in the user's favorites
+        is_favorite = FavoriteBook.objects.filter(user=request.user, book=book).exists()
+    return render(request, 'catalogue/book_detail.html', {'book': book, 'is_favorite': is_favorite})
+
+
+@login_required
+def add_favorite_book(request, book_id):
+    try:
+        existing_favorite = FavoriteBook.objects.get(user=request.user, book_id=book_id)
+        messages.info(request, 'Book is already in your favorites!')
+    except FavoriteBook.DoesNotExist:
+        favorite_book = FavoriteBook(user=request.user, book_id=book_id)
+        favorite_book.save()
+        messages.success(request, 'Book added to favorites!')
+    return redirect('book_detail', book_id=book_id)
+
+
+@login_required
+def remove_favorite_book(request, book_id):
+    try:
+        favorite_book = FavoriteBook.objects.get(user=request.user, book_id=book_id)
+        favorite_book.delete()
+        messages.success(request, 'Book removed from favorites!')
+    except FavoriteBook.DoesNotExist:
+        messages.error(request, 'Book is not in your favorites!')
+    return redirect('book_detail', book_id=book_id)
+
+
