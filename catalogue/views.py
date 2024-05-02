@@ -4,13 +4,15 @@ from django.core.paginator import Paginator
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponseBadRequest
 from django.db.models import Avg
+from .utils import dashboard_menu_options
 from .models import *
 from .forms import *
 
 
 # Create your views here.
 def catalogue(request):
-    return render(request, "catalogue/index.html")
+    menu_options = dashboard_menu_options
+    return render(request, "catalogue/index.html", {'menu_options': menu_options})
 
 
 @login_required
