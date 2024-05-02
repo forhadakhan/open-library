@@ -5,10 +5,12 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta name="keywords" content="open, library, django application"/>
+    <meta name="description" content="A library app using django"/>
     <title>
       {% block title %}
         Open Library
-      {% endblock %}
+      {% endblock title %}
     </title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="" />
@@ -19,9 +21,11 @@
 
     <link rel="stylesheet" type="text/css" href="{% static 'css/styles.css' %}" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href='https://fonts.googleapis.com/css?family=Inter' rel='stylesheet'>
     {% block app_css %}
-
-    {% endblock %}
+    {% endblock app_css %}
+    {% block app_js %}
+    {% endblock app_js %}
   </head>
   <body>
     <div class="container">
@@ -30,13 +34,15 @@
           <div class="header">
             <h1>Open Library</h1>
           </div>
-        {% endblock %}
+        {% endblock header %}
       </header>
       <main>
         {% block content %}
 
-        {% endblock %}
+        {% endblock content %}
       </main>
     </div>
   </body>
+  {% block app_scripts %} 
+  {% endblock app_scripts %}
 </html>

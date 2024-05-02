@@ -40,3 +40,59 @@ class Review(models.Model):
 
 
 
+
+#########################
+# Abandoned Features
+#########################
+
+# class ReadingProgress(models.Model):
+#     user = models.ForeignKey(User, on_delete=models.CASCADE)
+#     book = models.ForeignKey(Book, on_delete=models.CASCADE)
+#     # Track progress (e.g., pages read, percentage, completion status)
+#     pages_read = models.IntegerField(default=0)
+#     is_completed = models.BooleanField(default=False)
+
+#     class Meta:
+#         unique_together = ('user', 'book')  # Ensure one progress record per user/book
+
+#     def __str__(self):
+#         return f"{self.user.username} - {self.book.title} ({self.pages_read} pages read)"
+
+
+# class BorrowRequest(models.Model):
+#     user = models.ForeignKey(User, on_delete=models.CASCADE)
+#     book = models.ForeignKey('Book', on_delete=models.CASCADE)
+#     request_date = models.DateTimeField(auto_now_add=True)
+#     expected_return_date = models.DateTimeField()
+
+#     PENDING = 'P'
+#     APPROVED = 'A'
+#     REJECTED = 'R'
+#     STATUS_CHOICES = [
+#         (PENDING, 'Pending'),
+#         (APPROVED, 'Approved'),
+#         (REJECTED, 'Rejected'),
+#     ]
+#     status = models.CharField(max_length=1, choices=STATUS_CHOICES, default=PENDING)
+
+#     def __str__(self):
+#         return f"Borrow request for '{self.book.title}' by {self.user.username}"
+
+
+# class BorrowRecord(models.Model):
+#     user = models.ForeignKey(User, on_delete=models.CASCADE)
+#     borrow_request = models.OneToOneField(BorrowRequest, on_delete=models.CASCADE)
+#     borrow_date = models.DateTimeField(auto_now_add=True)
+#     expected_return_date = models.DateTimeField()
+#     return_date = models.DateTimeField(null=True, blank=True)
+#     returned = models.BooleanField(default=False)
+#     return_status = models.CharField(max_length=255, null=True, blank=True)
+
+#     def __str__(self):
+#         return f"Borrow record for '{self.borrow_request.book.title}' by {self.user.username}"
+
+#     @property
+#     def is_overdue(self):
+#         if self.return_date is None:
+#             return False
+#         return self.return_date > self.expected_return_date
