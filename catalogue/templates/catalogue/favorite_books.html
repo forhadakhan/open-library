@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% load static %}  
+{# Load the tag library #}
+{% load django_bootstrap5 %}
+
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+ 
+{% block app_css %}
+    <link rel="stylesheet" type="text/css" href="{% static "css/book-card.css" %}" />
+{% endblock app_css %}
+
+{% block title %}
+  Favorite Books  
+{% endblock title %}
+
+{% block header %}
+  {% include "navbar.html" with active_page="all-books" %}
+{% endblock header %}
+
+{% block content %}        
+    <div class="container mt-4">
+        <h1 class="h4 text-center border-bottom mb-4 pb-4 maintextColor">My Favorites</h1>
+        
+            <div class="row gap-5 mx-auto">
+                {% for favorite_book in page_obj %}            
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12 mb-3">
+                    <div class="book-card my-2" onclick="window.location.href='{% url "book_detail" favorite_book.book.id %}'">
+                        <div class="book-card__cover">
+                            <div class="book-card__book">
+                                <div class="book-card__book-front">
+                                    <div class="book-card__img">              
+                                        {% load cloudinary %}
+                                        {% if favorite_book.book.cover_image %}
+                                            {% cloudinary favorite_book.book.cover_image %}
+                                        {% else %}
+                                            <!-- Default placeholder image -->
+                                            <img src="{% static "images/open-library-cover.webp" %}" alt="Open Library Placeholder Cover" width="auto" height="auto">
+                                        {% endif %} 
+                                    </div>
+                                </div>
+                                <div class="book-card__book-back"></div>
+                                <div class="book-card__book-side"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="book-card__title">{{ favorite_book.book.title }}</div>
+                            <div class="book-card__author">{{ favorite_book.book.author }}</div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        
+        
+        <!-- Pagination links -->
+        {% if page_obj.has_other_pages %}
+            <div class="d-flex justify-content-center">
+                <ul class="pagination">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item"><a class="page-link" href="?page=1"><i class="bi bi-chevron-double-left"></i></a></li>
+                        <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}"><i class="bi bi-chevron-left"></i> </a></li>
+                    {% endif %}
+                    <li class="page-item active"><span class="page-link">{{ page_obj.number }}</span></li>
+                    {% if page_obj.has_next %}
+                        <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}"><i class="bi bi-chevron-right"></i> </a></li>
+                        <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}"><i class="bi bi-chevron-double-right"></i></a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        {% endif %}
+    </div>
+{% endblock content %}

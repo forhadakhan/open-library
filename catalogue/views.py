@@ -35,7 +35,7 @@ def add_book(request):
 
 def all_books(request):
     all_books_list = Book.objects.all()
-    paginator = Paginator(all_books_list, 30)  # Show 30 books per page
+    paginator = Paginator(all_books_list, 15)  # Show 15 books per page
 
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
@@ -121,4 +121,15 @@ def delete_review(request, review_id):
         messages.error(request, 'You are not authorized to delete this review.')
     
     return redirect('book_detail', book_id=review.book.id)
+
+
+@login_required
+def favorite_books(request):
+    favorite_books_list = FavoriteBook.objects.filter(user=request.user)
+    paginator = Paginator(favorite_books_list, 15)  # Show  15 favorite books per page
+
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, 'catalogue/favorite_books.html', {'page_obj': page_obj})
 
