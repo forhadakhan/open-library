@@ -63,3 +63,8 @@ body {
 .width-40 {
     max-width: 40rem;
 }
+
+
+*:focus {
+    box-shadow: none !important;
+}
