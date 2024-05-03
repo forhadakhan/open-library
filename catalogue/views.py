@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.core.paginator import Paginator
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponseBadRequest
-from django.db.models import Avg, Q
+from django.db.models import Avg, Q, F
 from .utils import dashboard_menu_options
 from .models import *
 from .forms import *
@@ -34,13 +34,51 @@ def add_book(request):
 
 
 def all_books(request):
-    all_books_list = Book.objects.all()
-    paginator = Paginator(all_books_list, 15)  # Show 15 books per page
+    # Get sorting parameters from the request
+    sort_by = request.GET.get('sort_by', 'default')  # Default sorting option
+    order_by = request.GET.get('order_by', 'asc')  # Default order: ascending
 
+    # Define the sorting options
+    sorting_options = {
+        'default': 'id',  # Default sorting by book ID
+        'publication_date': 'publication_date',
+        'upload_date': 'upload_date',
+        'rating': 'overall_rating',  # Assuming you have overall_rating field for books
+    }
+
+    # Get the field to sort by based on the selected option
+    sort_field = sorting_options.get(sort_by, 'id')
+
+    # Determine the ordering based on the selected order
+    if order_by == 'desc':
+        sort_field = F(sort_field).desc()
+
+    # Get all books queryset with rating  
+    all_books_list = Book.objects.annotate(overall_rating=Avg('review__rating'))
+
+    # Sort the queryset based on the selected sorting option
+    if sort_by != 'rating':  # For 'rating', sorting is handled separately due to aggregation
+        all_books_list = all_books_list.order_by(sort_field)
+
+    # For rating, sort by annotation since it requires aggregation
+    if sort_by == 'rating':
+        all_books_list = all_books_list.annotate(overall_rating=Avg('review__rating'))
+        if order_by == 'desc':
+            all_books_list = all_books_list.order_by('-overall_rating')
+        else:
+            all_books_list = all_books_list.order_by('overall_rating')
+
+    # Paginate the sorted queryset
+    paginator = Paginator(all_books_list, 15)  # Show 15 books per page
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     
-    return render(request, 'catalogue/books.html', {'page_obj': page_obj})
+    return render(request, 'catalogue/books.html', {
+        'page_obj': page_obj,
+        'sort_by': sort_by,
+        'order_by': order_by,
+    })
+
 
 
 

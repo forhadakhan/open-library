@@ -1,71 +1,220 @@
 {% extends "base.html" %}
-{% load static %}  
+{% load static %}
 {# Load the tag library #}
 {% load django_bootstrap5 %}
-
 {# Load CSS and JavaScript #}
 {% bootstrap_css %}
 {% bootstrap_javascript %}
- 
 {% block app_css %}
     <link rel="stylesheet" type="text/css" href="{% static "css/book-card.css" %}" />
 {% endblock app_css %}
+{% block internal_css %}
+    <style>
+        /* Optional: Custom styles for the cards */
+        .card {
+            margin-bottom: 2rem;
+            /* Minimum space between cards */
+        }
 
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            margin-right: -1rem;
+            /* Adjust for negative margin to counteract the padding */
+            margin-left: -1rem;
+            /* Adjust for negative margin to counteract the padding */
+        }
+
+        .col-custom {
+            padding-right: 1rem;
+            /* Adjust for padding */
+            padding-left: 1rem;
+            /* Adjust for padding */
+            flex: 1 0 calc(50% - 2rem);
+            /* Distribute space evenly with minimum space */
+        }
+
+        @media (min-width: 576px) {
+            .col-custom {
+                flex: 1 0 calc(33.333% - 2rem);
+                /* Adjust for small screens */
+            }
+        }
+
+        @media (min-width: 768px) {
+            .col-custom {
+                flex: 1 0 calc(25% - 2rem);
+                /* Adjust for medium screens */
+            }
+        }
+
+        @media (min-width: 992px) {
+            .col-custom {
+                flex: 1 0 calc(20% - 2rem);
+                /* Adjust for large screens */
+            }
+        }
+    </style>
+{% endblock internal_css %}
 {% block title %}
-  All Books
+    All Books
 {% endblock title %}
-
 {% block header %}
-  {% include "navbar.html" with active_page="all-books" %}
+    {% include "navbar.html" with active_page="all-books" %}
 {% endblock header %}
-
-{% block content %}        
+{% block content %}
     <div class="container mt-4">
-        <h1 class="h4 text-center border-bottom mb-4 pb-4 maintextColor">All Books</h1>
-        
-            <div class="row gap-5 mx-auto">
-                {% for book in page_obj %}            
-                <div class="col-lg-3 col-md-4 col-sm-6 col-12 mb-3">
-                    <div class="book-card my-2" onclick="window.location.href='{% url "book_detail" book.id %}'">
+        <h1 class="h4 text-center border-bottom mb-4 pb-4 maintextColor">
+            All Books
+        </h1>
+        {% comment %}
+            Sorting options
+        {% endcomment %}
+        <p class="d-inline-flex gap-1">
+            <button class="btn btn-sm btn-outline-dark border ms-auto"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#collapseFilter"
+                    aria-expanded="false"
+                    aria-controls="collapseFilter">
+                <i class="bi bi-funnel"></i> Filter
+            </button>
+        </p>
+        <div class="collapse" id="collapseFilter">
+            <div class="d-flex justify-content-end">
+                <form class="form-inline">
+                    {% comment %} Filter by {% endcomment %}
+                    <div class="mr-3 my-2">
+                        <label class="mr-2 small text-secondary" for="sort_by">
+                            Filter by:
+                        </label>
+                        <select class="form-select form-select-sm" name="sort_by" id="sort_by">
+                            <option value="default" {% if sort_by == 'default' %}selected{% endif %}>
+                                Default
+                            </option>
+                            <option value="publication_date"
+                                    {% if sort_by == 'publication_date' %}selected{% endif %}>
+                                Publication Date
+                            </option>
+                            <option value="upload_date"
+                                    {% if sort_by == 'upload_date' %}selected{% endif %}>
+                                Upload Date
+                            </option>
+                            <option value="rating" {% if sort_by == 'rating' %}selected{% endif %}>
+                                Rating
+                            </option>
+                        </select>
+                    </div>
+                    {% comment %} Order by {% endcomment %}
+                    <div class="btn-group my-2"
+                         role="group"
+                         aria-label="Basic radio toggle button group">
+                        <input type="radio"
+                               value="desc"
+                               class="btn-check"
+                               name="order_by"
+                               id="order_btnradio1"
+                               {% if order_by == 'desc' %}checked{% endif %} />
+                        <label class="btn btn-sm btn-outline-secondary" for="order_btnradio1">
+                            Ascending
+                        </label>
+                        <input type="radio"
+                               value="asc"
+                               class="btn-check"
+                               name="order_by"
+                               id="order_btnradio2"
+                               {% if order_by == 'asc' %}checked{% endif %} />
+                        <label class="btn btn-sm btn-outline-secondary" for="order_btnradio2">
+                            Descending
+                        </label>
+                    </div>
+                    <button type="submit" class="btn btn-sm btn-primary ml-2">
+                        Apply
+                    </button>
+                </form>
+            </div>
+        </div>
+        {% comment %}
+            Books 
+        {% endcomment %}
+        <div class="row">
+            {% for book in page_obj %}
+                <div class="col-custom">
+                    <div class="book-card my-4"
+                         onclick="window.location.href='{% url "book_detail" book.id %}'">
                         <div class="book-card__cover">
                             <div class="book-card__book">
                                 <div class="book-card__book-front">
-                                    <div class="book-card__img">              
+                                    <div class="book-card__img">
                                         {% load cloudinary %}
                                         {% if book.cover_image %}
                                             {% cloudinary book.cover_image %}
                                         {% else %}
                                             <!-- Default placeholder image -->
-                                            <img src="{% static "images/open-library-cover.webp" %}" alt="Open Library Placeholder Cover" width="auto" height="auto">
-                                        {% endif %} 
+                                            <img src="{% static "images/open-library-cover.webp" %}" alt="Open Library Placeholder Cover" width="auto" height="auto" />
+                                        {% endif %}
                                     </div>
                                 </div>
-                                <div class="book-card__book-back"></div>
-                                <div class="book-card__book-side"></div>
+                                <div class="book-card__book-back">
+                                </div>
+                                <div class="book-card__book-side">
+                                </div>
                             </div>
                         </div>
                         <div>
-                            <div class="book-card__title">{{ book.title }}</div>
-                            <div class="book-card__author">{{ book.author }}</div>
+                            <div class="book-card__title">
+                                {{ book.title }}
+                            </div>
+                            <div class="book-card__author">
+                                {{ book.author }}
+                            </div>
+                            <div class="book-card__rating">
+                                <div class="lc-block d-flex gap-1 py-3">
+                                    <i class="bi bi-star{% if book.overall_rating >= 1 %}-fill{% elif book.overall_rating >= 0.5 %}-half{% endif %}"></i>
+                                    <i class="bi bi-star{% if book.overall_rating >= 2 %}-fill{% elif book.overall_rating >= 1.5 %}-half{% endif %}"></i>
+                                    <i class="bi bi-star{% if book.overall_rating >= 3 %}-fill{% elif book.overall_rating >= 2.5 %}-half{% endif %}"></i>
+                                    <i class="bi bi-star{% if book.overall_rating >= 4 %}-fill{% elif book.overall_rating >= 3.5 %}-half{% endif %}"></i>
+                                    <i class="bi bi-star{% if book.overall_rating == 5 %}-fill{% elif book.overall_rating >= 4.5 %}-half{% endif %}"></i>
+                                    {% if book.overall_rating %}
+                                        ({{ book.overall_rating }}/5.0)
+                                    {% else %}
+                                        (N/A)
+                                    {% endif %}
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                {% endfor %}
-            </div>
-        
-        
-        <!-- Pagination links -->
+            {% endfor %}
+        </div>
+        {% comment %}
+            Pagination links
+        {% endcomment %}
         {% if page_obj.has_other_pages %}
             <div class="d-flex justify-content-center">
                 <ul class="pagination">
                     {% if page_obj.has_previous %}
-                        <li class="page-item"><a class="page-link" href="?page=1"><i class="bi bi-chevron-double-left"></i></a></li>
-                        <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}"><i class="bi bi-chevron-left"></i> </a></li>
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="?page=1&sort_by={{ sort_by }}&order_by={{ order_by }}"><i class="bi bi-chevron-double-left"></i></a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="?page={{ page_obj.previous_page_number }}&sort_by={{ sort_by }}&order_by={{ order_by }}"><i class="bi bi-chevron-left"></i> </a>
+                        </li>
                     {% endif %}
-                    <li class="page-item active"><span class="page-link">{{ page_obj.number }}</span></li>
+                    <li class="page-item active">
+                        <span class="page-link">{{ page_obj.number }}</span>
+                    </li>
                     {% if page_obj.has_next %}
-                        <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}"><i class="bi bi-chevron-right"></i> </a></li>
-                        <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}"><i class="bi bi-chevron-double-right"></i></a></li>
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="?page={{ page_obj.next_page_number }}&sort_by={{ sort_by }}&order_by={{ order_by }}"><i class="bi bi-chevron-right"></i> </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="?page={{ page_obj.paginator.num_pages }}&sort_by={{ sort_by }}&order_by={{ order_by }}"><i class="bi bi-chevron-double-right"></i></a>
+                        </li>
                     {% endif %}
                 </ul>
             </div>
