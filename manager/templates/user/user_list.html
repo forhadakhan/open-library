@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% load static %}
+{# Load the tag library #}
+{% load django_bootstrap5 %}
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% block title %}
+    User List
+{% endblock title %}
+{% block header %}
+    {% include "navbar.html" with active_page="user_list" %}
+{% endblock header %}
+{% block content %}
+    <div class="container mt-4">
+        <h1 class="h4 text-center border-bottom mb-4 pb-4 maintextColor">
+            All Users
+        </h1>
+        <form class="mb-4" method="get" action="{% url 'user_list' %}">
+            <div class="input-group">
+                <input type="text"
+                       class="form-control border"
+                       placeholder="Search by name, email, username"
+                       name="name"
+                       value="{{ request.GET.name }}" />
+                <button class="btn btn-secondary border" type="submit">
+                    Search
+                </button>
+                <a href="{% url 'user_list' %}" class="btn btn-outline-dark border">Clear</a>
+            </div>
+        </form>
+        <div class="row gap-3 mx-auto">
+            {% for user in page_obj %}
+                <div class="col-12 border p-3 bg-white cursor-pointer"
+                     onclick="window.location.href='{% url "user_details" user.id %}'">
+                    <h5 class="card-title">
+                        {{ user.get_full_name }}
+                    </h5>
+                    <p class="mb-0">
+                        @{{ user.username }}
+                        <span class="badge text-bg-dark">
+                            {% if user.is_superuser %}
+                                Superuser
+                            {% elif user.is_staff %}
+                                Staff
+                            {% else %}
+                                General
+                            {% endif %}
+                        </span>
+                    </p>
+                    <small>{{ user.email }}</small>
+                </div>
+            {% endfor %}
+        </div>
+        <!-- Pagination links -->
+        {% if page_obj.has_other_pages %}
+            <div class="d-flex justify-content-center">
+                <ul class="pagination">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page=1"><i class="bi bi-chevron-double-left"></i></a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}"><i class="bi bi-chevron-left"></i> </a>
+                        </li>
+                    {% endif %}
+                    <li class="page-item active">
+                        <span class="page-link">{{ page_obj.number }}</span>
+                    </li>
+                    {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.next_page_number }}"><i class="bi bi-chevron-right"></i> </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}"><i class="bi bi-chevron-double-right"></i></a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        {% endif %}
+    </div>
+{% endblock content %}
