@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load static %}  
 {# Load the tag library #}
 {% load django_bootstrap5 %}
@@ -8,26 +8,25 @@
 {% bootstrap_javascript %}
  
 {% block app_css %}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/book-card.css' %}" />
-{% endblock %}
+    <link rel="stylesheet" type="text/css" href="{% static "css/book-card.css" %}" />
+{% endblock app_css %}
 
 {% block title %}
   All Books
-{% endblock %}
+{% endblock title %}
 
 {% block header %}
-  {% include 'navbar.html' with active_page='all-books' %}
-{% endblock %}
+  {% include "navbar.html" with active_page="all-books" %}
+{% endblock header %}
 
-{% block content %}
-        
+{% block content %}        
     <div class="container mt-4">
         <h1 class="h4 text-center border-bottom mb-4 pb-4 maintextColor">All Books</h1>
         
             <div class="row gap-5 mx-auto">
                 {% for book in page_obj %}            
                 <div class="col-lg-3 col-md-4 col-sm-6 col-12 mb-3">
-                    <div class="book-card my-2" onclick="window.location.href='{% url 'book_detail' book.id %}'">
+                    <div class="book-card my-2" onclick="window.location.href='{% url "book_detail" book.id %}'">
                         <div class="book-card__cover">
                             <div class="book-card__book">
                                 <div class="book-card__book-front">
@@ -37,7 +36,7 @@
                                             {% cloudinary book.cover_image %}
                                         {% else %}
                                             <!-- Default placeholder image -->
-                                            <img src="{% static 'images/open-library-cover.webp' %}" alt="Open Library Placeholder Cover">
+                                            <img src="{% static "images/open-library-cover.webp" %}" alt="Open Library Placeholder Cover" width="auto" height="auto">
                                         {% endif %} 
                                     </div>
                                 </div>
@@ -60,16 +59,16 @@
             <div class="d-flex justify-content-center">
                 <ul class="pagination">
                     {% if page_obj.has_previous %}
-                        <li class="page-item"><a class="page-link" href="?page=1">&laquo; First</a></li>
-                        <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+                        <li class="page-item"><a class="page-link" href="?page=1"><i class="bi bi-chevron-double-left"></i></a></li>
+                        <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}"><i class="bi bi-chevron-left"></i> </a></li>
                     {% endif %}
                     <li class="page-item active"><span class="page-link">{{ page_obj.number }}</span></li>
                     {% if page_obj.has_next %}
-                        <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
-                        <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last &raquo;</a></li>
+                        <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}"><i class="bi bi-chevron-right"></i> </a></li>
+                        <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}"><i class="bi bi-chevron-double-right"></i></a></li>
                     {% endif %}
                 </ul>
             </div>
         {% endif %}
     </div>
-{% endblock %}
+{% endblock content %}

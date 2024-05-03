@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
+{# Load the tag library #}
+{% load django_bootstrap5 %}
 {# Load CSS and JavaScript #}
 {% bootstrap_css %}
 {% bootstrap_javascript %}
@@ -12,23 +14,21 @@
 {% block content %}
     <div class="container my-5">
         <div class="row">
-            {% if user.is_authenticated %}
-                {% for option in menu_options %}
-                    {% if user.is_staff or not option.staff_only %}
-                        <div class="col-lg-4 col-md-6 mb-4">
-                            <div class="card rounded-0 border-0 textColor">
-                                <div class="card-body d-flex align-items-center btn btn-outline-primary border rounded-0"
-                                     onclick="window.location.href='{% url option.url_name %}'">
-                                    <i class="{{ option.icon }} h2"></i>
-                                    <h4 class="ms-3">
-                                        {{ option.title }}
-                                    </h4>
-                                </div>
+            {% for option in menu_options %}
+                {% if user.is_staff or not option.staff_only %}
+                    <div class="col-lg-4 col-md-6 mb-4">
+                        <div class="card rounded-0 border-0 textColor">
+                            <div class="card-body d-flex align-items-center btn btn-outline-primary border rounded-0"
+                                 onclick="window.location.href='{% url option.url_name %}'">
+                                <i class="{{ option.icon }} h2"></i>
+                                <h4 class="ms-3">
+                                    {{ option.title }}
+                                </h4>
                             </div>
                         </div>
-                    {% endif %}
-                {% endfor %}
-            {% endif %}
+                    </div>
+                {% endif %}
+            {% endfor %}
         </div>
     </div>
 {% endblock content %}
