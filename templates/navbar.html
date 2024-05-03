@@ -1,25 +1,45 @@
 {% load static %}
-
 <nav class="navbar navbar-expand-lg p-0 m-0 py-4 mb-4 border-bottom">
   <div class="container-fluid">
+    {% comment %} Logo/Titile {% endcomment %}
     <div class="d-flex align-items-center navbar-brand" id="logo">
-      <a href="{% url 'index' %}" class="nav-link textColor brand d-lg-inline-block">
+      <a href="{% url 'index' %}"
+         class="nav-link textColor brand d-lg-inline-block">
         <span class="h1 fw-light">Open</span>
         <span class="h1 d-lg-inline-block">Library</span>
       </a>
     </div>
-    <button class="navbar-toggler mb-sm-5" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-
+    {% comment %} Menu button for small screens {% endcomment %}
+    <button class="navbar-toggler mb-sm-5"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarNavDropdown"
+            aria-controls="navbarNavDropdown"
+            aria-expanded="false"
+            aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    {% comment %} Menu bar {% endcomment %}
     <div class="collapse navbar-collapse" id="navbarNavDropdown">
       <ul class="navbar-nav ms-auto gap-2 textColor" aria-current="true">
         <li>
           <span class="p-5 d-lg-none"></span>
         </li>
         <li class="nav-item">
-          <div class="input-group">
-            <input type="search" class="form-control rounded-0 p-2" placeholder="Search Book" aria-label="Search" />
-            <button class="btn border rounded-0 input-group-text"><i class="bi bi-search textColor"></i></button>
-          </div>
+          {% comment %} Search {% endcomment %}
+          <form method="get" action="{% url 'search_book' %}">
+            <div class="input-group">
+              <input type="text"
+                     class="form-control rounded-0 p-2"
+                     name="q"
+                     placeholder="Search books by title, author, or genre"
+                     aria-label="Search" />
+              <button class="btn border rounded-0 input-group-text btn-outline-secondary"
+                      type="submit">
+                <i class="bi bi-search"></i>
+              </button>
+            </div>
+          </form>
         </li>
         <li class="nav-item border {% if active_page == 'home' %} disable-option {% else %} nav-option {% endif %}">
           <a class="nav-link px-3" href="{% url 'index' %}"><i class="bi bi-house"></i> Home</a>
@@ -27,21 +47,38 @@
         <li class="nav-item border {% if active_page == 'catalogue' %} disable-option {% else %} nav-option {% endif %}">
           <a class="nav-link px-3" href="{% url 'catalogue' %}"><i class="bi bi-speedometer2"></i> Dashboard</a>
         </li>
+        {% comment %}
+          Show options depending on user status
+        {% endcomment %}
         {% if user.is_authenticated %}
           <li class="nav-item border-0">
             <div class="dropdown">
-              <button class="btn dropdown-toggle border rounded-0 w-100 text-left py-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="bi bi-person-gear"></i> Account 
+              <button class="btn dropdown-toggle border rounded-0 w-100 text-left py-2"
+                      type="button"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false">
+                <i class="bi bi-person-gear"></i> Account
               </button>
               <ul class="dropdown-menu mt-3 w-auto">
-                <li><a class="btn dropdown-item" href="{% url 'user-account' %}"><i class="bi bi-person"></i> Profile</a></li>
-                <li><a class="btn dropdown-item" href="{% url 'user-account-update' %}"><i class="bi bi-gear"></i> Settings</a></li>
-                <li><a class="btn dropdown-item" href="{% url 'user-account-update-password' %}"><i class="bi bi-key"></i> Change Password</a></li>
-                <li><hr class="dropdown-divider"></li>
+                <li>
+                  <a class="btn dropdown-item" href="{% url 'user-account' %}"><i class="bi bi-person"></i> Profile</a>
+                </li>
+                <li>
+                  <a class="btn dropdown-item" href="{% url 'user-account-update' %}"><i class="bi bi-gear"></i> Settings</a>
+                </li>
+                <li>
+                  <a class="btn dropdown-item"
+                     href="{% url 'user-account-update-password' %}"><i class="bi bi-key"></i> Change Password</a>
+                </li>
+                <li>
+                  <hr class="dropdown-divider" />
+                </li>
                 <li>
                   <form action="{% url 'logout' %}" method="post" class="w-100">
                     {% csrf_token %}
-                    <button class="btn text-danger rounded-0 w-100 fw-bold" type="submit"><i class="bi bi-door-open"></i> Log Out</button>
+                    <button class="btn text-danger rounded-0 w-100 fw-bold" type="submit">
+                      <i class="bi bi-door-open"></i> Log Out
+                    </button>
                   </form>
                 </li>
               </ul>

@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.core.paginator import Paginator
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponseBadRequest
-from django.db.models import Avg
+from django.db.models import Avg, Q
 from .utils import dashboard_menu_options
 from .models import *
 from .forms import *
@@ -41,6 +41,29 @@ def all_books(request):
     page_obj = paginator.get_page(page_number)
     
     return render(request, 'catalogue/books.html', {'page_obj': page_obj})
+
+
+
+def search_books(request):
+    query = request.GET.get('q')
+    if query is None:
+        return redirect('all_books')
+    
+    if query:
+        books = Book.objects.filter(
+            Q(title__icontains=query) |
+            Q(author__icontains=query) |
+            Q(genre__icontains=query)
+        ).distinct()
+    else:
+        books = []
+
+    paginator = Paginator(books, 15)  # Show 15 books per page
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, 'catalogue/search.html', {'page_obj': page_obj, 'query': query})
+
 
 
 def book_detail(request, book_id):
