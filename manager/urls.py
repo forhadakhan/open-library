@@ -11,5 +11,11 @@ urlpatterns = [
     path('user/account/delete/', views.delete_profile, name='delete_account'),
     path('~/user/all/', views.user_list, name='user_list'),
     path('~/user/<int:user_id>/', views.user_details, name='user_details'),
+    path('~/user/remove_staff/<int:user_id>/', views.remove_staff, name='remove_staff'),
+    path('~/user/make_staff/<int:user_id>/', views.make_staff, name='make_staff'),
+    path('~/user/remove_superuser/<int:user_id>/', views.remove_superuser, name='remove_superuser'),
+    path('~/user/make_superuser/<int:user_id>/', views.make_superuser, name='make_superuser'),
+    path('~/user/delete_user/<int:user_id>/', views.delete_user, name='delete_user'),
+    path('~/users/', views.user_list, name='all_users'),
 ]
 

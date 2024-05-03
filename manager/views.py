@@ -130,4 +130,57 @@ def user_detail(request, user_id):
 @login_required
 @user_passes_test(lambda u: u.is_superuser, login_url='/home/user/restricted/')
 def user_details(request, user_id):
-    pass 
+    user = get_object_or_404(User, pk=user_id)
+    return render(request, 'user/user_details.html', {'user': user})
+
+@login_required
+@user_passes_test(lambda u: u.is_superuser, login_url='/home/user/restricted/')
+def remove_staff(request, user_id):
+    user = get_object_or_404(User, pk=user_id)
+    if user.is_staff:
+        user.is_staff = False
+        user.save()
+        messages.success(request, f"{user.username} is no longer a staff member.")
+    return redirect('user_details', user_id=user_id)
+
+@login_required
+@user_passes_test(lambda u: u.is_superuser, login_url='/home/user/restricted/')
+def make_staff(request, user_id):
+    user = get_object_or_404(User, pk=user_id)
+    if not user.is_staff:
+        user.is_staff = True
+        user.save()
+        messages.success(request, f"{user.username} is now a staff member.")
+    return redirect('user_details', user_id=user_id)
+
+@login_required
+@user_passes_test(lambda u: u.is_superuser, login_url='/home/user/restricted/')
+def remove_superuser(request, user_id):
+    user = get_object_or_404(User, pk=user_id)
+    if user.is_superuser:
+        user.is_superuser = False
+        user.save()
+        messages.success(request, f"{user.username} is no longer a superuser.")
+    return redirect('user_details', user_id=user_id)
+
+@login_required
+@user_passes_test(lambda u: u.is_superuser, login_url='/home/user/restricted/')
+def make_superuser(request, user_id):
+    user = get_object_or_404(User, pk=user_id)
+    if not user.is_superuser:
+        user.is_superuser = True
+        user.save()
+        messages.success(request, f"{user.username} is now a superuser.")
+    return redirect('user_details', user_id=user_id)
+
+@login_required
+@user_passes_test(lambda u: u.is_superuser, login_url='/home/user/restricted/')
+def delete_user(request, user_id):
+    user = get_object_or_404(User, pk=user_id)
+    if user != request.user:  # Prevent deleting own account
+        user.delete()
+        messages.success(request, f"{user.username} has been deleted.")
+        return redirect('all_users')
+    else:
+        messages.error(request, "You cannot delete your own account.")
+        return redirect('user_details', user_id=user_id)

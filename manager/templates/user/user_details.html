@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% load static %}
+{# Load the tag library #}
+{% load django_bootstrap5 %}
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% block title %}
+    User Details
+{% endblock title %}
+{% block header %}
+    {% include "navbar.html" with active_page="user_details" %}
+{% endblock header %}
+{% block content %}
+    <div class="row g-0">
+        <div class="col-md-4">
+            {% if user.is_superuser %}
+                <img src="{% static "images/profile-super.webp" %}" class="img-fluid rounded-start" alt="super-user" width="auto" height="auto" />
+            {% elif user.is_staff %}
+                <img src="{% static "images/profile-staff.webp" %}" class="img-fluid rounded-start" alt="staff-profile" width="auto" height="auto" />
+            {% else %}
+                <img src="{% static "images/profile.webp" %}" class="img-fluid rounded-start" alt="member-profile" width="auto" height="auto" />
+            {% endif %}
+        </div>
+        <div class="col-md-8">
+            <div class="card-body py-5">
+                <h5 class="card-title">
+                    {{ user.first_name }} {{ user.last_name }}
+                </h5>
+                {% if user.is_authenticated %}
+                    <span class="badge text-bg-dark mb-2">
+                        {% if user.is_superuser %}
+                            Super User
+                        {% elif user.is_staff %}
+                            Staff User
+                        {% else %}
+                            General User
+                        {% endif %}
+                    </span>
+                {% endif %}
+                <h6 class="card-subtitle mb-2 text-body-secondary">
+                    Username: {{ user.username }}
+                </h6>
+                <p class="card-text">
+                    Email: {{ user.email }}
+                </p>
+                <p class="card-text">
+                    <small class="text-body-secondary">Member since {{ user.date_joined }}</small>
+                </p>
+            </div>
+            {% comment %} Actions {% endcomment %}
+            <div class="btn-group" role="group">
+                {% if user.is_staff %}
+                    <a href="{% url 'remove_staff' user.id %}" class="btn btn-outline-primary" onclick="return confirmAction('Remove Staff');">Remove Staff</a>
+                {% else %}
+                    <a href="{% url 'make_staff' user.id %}" class="btn btn-outline-primary" onclick="return confirmAction('Make Staff');">Make Staff</a>
+                {% endif %}
+                {% if user.is_superuser %}
+                    <a href="{% url 'remove_superuser' user.id %}" class="btn btn-outline-primary" onclick="return confirmAction('Remove Super User');">Remove Super User</a>
+                {% else %}
+                    <a href="{% url 'make_superuser' user.id %}" class="btn btn-outline-primary" onclick="return confirmAction('Make Super User');">Make Super User</a>
+                {% endif %}
+            </div>
+            <div class="my-3">
+                <a href="{% url 'delete_user' user.id %}" class="btn btn-sm btn-danger" onclick="return confirmAction('Delete User');">Delete User</a>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+
+{% block app_scripts %}
+<script>
+    function confirmAction(action) {
+        return confirm(`Are you sure you want to ${action}?`);
+    }
+</script>
+{% endblock app_scripts %}
