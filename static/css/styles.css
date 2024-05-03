@@ -68,3 +68,7 @@ body {
 *:focus {
     box-shadow: none !important;
 }
+
+.cursor-pointer {
+    cursor: pointer;
+}
