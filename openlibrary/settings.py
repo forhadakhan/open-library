@@ -69,6 +69,7 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
             BASE_DIR / "templates",
+            BASE_DIR / "manager/templates",
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -156,3 +157,15 @@ cloudinary.config(
   api_key = os.getenv('CLOUDINARY_API_KEY'), 
   api_secret =  os.getenv('CLOUDINARY_API_SECRET'),
 )
+
+# Email configuration
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
+
+PASSWORD_RESET_SUBJECT_TEMPLATE = 'registration/password_reset_subject.txt'
+
+

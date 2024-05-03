@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load static %}
 {# Load the tag library #}
 {% load django_bootstrap5 %}
@@ -9,16 +9,16 @@
 
 {% block title %}
   Login
-{% endblock %}
+{% endblock title %}
 
 {% block header %}
-  {% include 'navbar.html' with active_page='login' %}
-{% endblock %}
+  {% include "navbar.html" with active_page="login" %}
+{% endblock header %}
 
 {% block content %}
   <div class="content-center">
     {% if user.is_authenticated %}
-      <form action="{%url 'logout' %}" method="post">
+      <form action="{% url 'logout' %}" method="post">
         <p>You are already logged in as <strong> {{ user.username }} </strong></p>
         {% csrf_token %}
         <button type="submit" class="btn btn-sm btn-danger">Logout</button>
@@ -29,12 +29,12 @@
 
       {% bootstrap_form form %}
 
-      {% bootstrap_button button_type='submit' content='Login' %}
-      {% bootstrap_button button_type='reset' content='Clear' class="secondary" %}
+      <button class="btn btn-sm btn-primary" type="submit">Login</button>
+      <button class="btn btn-sm btn-outline-secondary" type="reset">Clear</button>
       <br /> 
       <br /> 
       <a href="{% url 'password_reset' %}">Forgot Password?</a>
     </form>
     {% endif %}
   </div>
-{% endblock %}
+{% endblock content %}
