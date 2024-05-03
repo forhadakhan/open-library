@@ -1,56 +1,85 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load static %}
 {# Load the tag library #}
 {% load django_bootstrap5 %}
-
 {# Load CSS and JavaScript #}
 {% bootstrap_css %}
 {% bootstrap_javascript %}
-
 {% block title %}
   Profile
-{% endblock %}
-
+{% endblock title %}
 {% block header %}
-  {% include 'navbar.html' with active_page='account' %}
-{% endblock %}
-
+  {% include "navbar.html" with active_page="account" %}
+{% endblock header %}
 {% block content %}
-  <div class="card my-5 w-100 mx-auto" style="max-width: 640px;">
-    <div class="card-header">
-      <ul class="nav nav-tabs nav-fill card-header-tabs">
-        <li class="nav-item">
-          <a class="nav-link active disabled" aria-current="true" href="#">Profile</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'user-account-update' %}">Update</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'user-account-update-password' %}">Change Password</a>
-        </li>
-      </ul>
-    </div>
-    <div class="row g-0">
-      <div class="col-md-4">
-        {% if user.is_superuser %}
-          <img src="{% static 'images/profile-super.webp' %}" class="img-fluid rounded-start" alt="super-user" />
-        {% elif user.is_staff %}
-          <img src="{% static 'images/profile-staff.webp' %}" class="img-fluid rounded-start" alt="staff-profile" />
-        {% else %}
-          <img src="{% static 'images/profile.webp' %}" class="img-fluid rounded-start" alt="member-profile" />
-        {% endif %}
-      </div>
-      <div class="col-md-8">
-        <div class="card-body py-5">
-          <h5 class="card-title">{{ user.first_name }} {{ user.last_name }}</h5>
-          <h6 class="card-subtitle mb-2 text-body-secondary">Username: {{ user.username }}</h6>
-          <p class="card-text">Email: {{ user.email }}</p>
-          <p class="card-text">
-            <small class="text-body-secondary">Member since {{ user.date_joined }}</small>
-          </p>
+  <div class="container width-40">
+    {% comment %} Profile Section {% endcomment %}
+    <section>
+      <div class="card my-5 w-100 mx-auto">
+        <div class="card-header">
+          <ul class="nav nav-tabs nav-fill card-header-tabs">
+            <li class="nav-item">
+              <a class="nav-link active disabled" aria-current="true" href="#">Profile</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url "user-account-update" %}">Update</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url "user-account-update-password" %}">Change Password</a>
+            </li>
+          </ul>
+        </div>
+        <div class="row g-0">
+          <div class="col-md-4">
+            {% if user.is_superuser %}
+              <img src="{% static "images/profile-super.webp" %}" class="img-fluid rounded-start" alt="super-user" width="auto" height="auto" />
+            {% elif user.is_staff %}
+              <img src="{% static "images/profile-staff.webp" %}" class="img-fluid rounded-start" alt="staff-profile" width="auto" height="auto" />
+            {% else %}
+              <img src="{% static "images/profile.webp" %}" class="img-fluid rounded-start" alt="member-profile" width="auto" height="auto" />
+            {% endif %}
+          </div>
+          <div class="col-md-8">
+            <div class="card-body py-5">
+              <h5 class="card-title">
+                {{ user.first_name }} {{ user.last_name }}
+              </h5>
+              {% if user.is_authenticated %}
+                <span class="badge text-bg-dark mb-2">
+                  {% if user.is_superuser %}
+                    Super User
+                  {% elif user.is_staff %}
+                    Staff User
+                  {% else %}
+                    General User
+                  {% endif %}
+                </span>
+              {% endif %}
+              <h6 class="card-subtitle mb-2 text-body-secondary">
+                Username: {{ user.username }}
+              </h6>
+              <p class="card-text">
+                Email: {{ user.email }}
+              </p>
+              <p class="card-text">
+                <small class="text-body-secondary">Member since {{ user.date_joined }}</small>
+              </p>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+    </section>
+    {% comment %} Danger Zone {% endcomment %}
+    <section class="mb-5 py-5">
+      <div class="card text-danger">
+        <div class="card-header fw-bold">
+          Danger zone
+        </div>
+        <div class="card-body">
+          <small>Permanently delete your account?
+            <a href="{% url "delete_account" %}" class="text-danger">Delete</a></small>
+        </div>
+      </div>
+    </section>
   </div>
-
-{% endblock %}
+{% endblock content %}
