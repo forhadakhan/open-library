@@ -13,10 +13,10 @@
 {% endblock header %}
 {% block content %}
     <div class="container my-5">
-        <div class="row">
+        <div class="row row-cols-1 row-cols-md-2 row-cols-xl-4 py-2">
             {% for option in menu_options %}
                 {% if user.is_staff or not option.staff_only %}
-                    <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="col p-2 mx-auto">
                         <div class="card rounded-0 border-0 textColor">
                             <div class="card-body d-flex align-items-center btn btn-outline-primary border rounded-0"
                                  onclick="window.location.href='{% url option.url_name %}'">

@@ -176,7 +176,7 @@
                                     <i class="bi bi-star{% if book.overall_rating >= 4 %}-fill{% elif book.overall_rating >= 3.5 %}-half{% endif %}"></i>
                                     <i class="bi bi-star{% if book.overall_rating == 5 %}-fill{% elif book.overall_rating >= 4.5 %}-half{% endif %}"></i>
                                     {% if book.overall_rating %}
-                                        ({{ book.overall_rating }}/5.0)
+                                        ({{ book.overall_rating|floatformat:1 }}/5.0)
                                     {% else %}
                                         (N/A)
                                     {% endif %}
