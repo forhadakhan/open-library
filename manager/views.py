@@ -1,13 +1,11 @@
+from django.contrib import messages 
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
-from django.contrib.auth import login
-from django import forms
-from django.shortcuts import redirect, render
+from django.contrib.auth import login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
-from .forms import ProfileUpdateForm
-from django.contrib.auth import update_session_auth_hash
-from django.contrib import messages
+from django.shortcuts import redirect, render
+from django import forms
+from .forms import *
 
 
 
@@ -75,3 +73,15 @@ def index(request):
 
 def restricted(request):
     return render(request, "restricted.html")
+
+
+@login_required
+def delete_profile(request):
+    if request.method == 'POST':
+        # Delete the user's account
+        request.user.delete()
+        # Log out the user
+        logout(request)
+        messages.success(request, 'Your account has been deleted successfully.')
+        return redirect('index')  # Redirect to the home page after deletion
+    return render(request, 'user/delete_profile.html')

@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{# Load the tag library #}
+{% load django_bootstrap5 %}
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% block title %}
+    Delete Profile
+{% endblock title %}
+{% block header %}
+    {% include "navbar.html" with active_page="account" %}
+{% endblock header %}
+{% block content %}
+    <div class="container">
+        <div class="row justify-content-center mt-5">
+            <div class="col-md-8">
+                <div class="card text-center">
+                    <div class="card-header h5 text-danger">
+                        Confirm Delete Profile
+                    </div>
+                    <div class="card-body">
+                        <p>
+                            Are you sure you want to delete your account?
+                        </p>
+                        <small>
+                            This action cannot be undone, and
+                            you will lose all your data parmanently.
+                        </small>
+                    </div>
+                    <div class="card-footer">
+                        <form method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-sm btn-danger">
+                                Delete Account
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
