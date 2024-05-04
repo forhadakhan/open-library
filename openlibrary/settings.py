@@ -18,7 +18,7 @@ env.read_env(os.path.join(BASE_DIR, '.env'))
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # Debug mode: Set to False in production
-DEBUG = True
+DEBUG = os.getenv('DEBUG') == True
 
 # Hosts that Django will serve
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS')
