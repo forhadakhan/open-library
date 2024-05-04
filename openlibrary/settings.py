@@ -18,7 +18,7 @@ env.read_env(os.path.join(BASE_DIR, '.env'))
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # Debug mode: Set to False in production
-DEBUG = env('DEBUG')
+DEBUG = True
 
 # Hosts that Django will serve
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS')
@@ -53,6 +53,13 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
+]
+
+# Setup Authentication
+AUTH_USER_MODEL = 'manager.User'
+AUTHENTICATION_BACKENDS = [
+    'manager.authentication.EmailOrUsernameModelBackend',
+    # 'django.contrib.auth.backends.ModelBackend',
 ]
 
 # Template configuration

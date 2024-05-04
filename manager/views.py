@@ -2,7 +2,7 @@
 
 from django.core.paginator import Paginator
 from django.contrib import messages 
-from django.contrib.auth.models import User
+from .models import User
 from django.contrib.auth.forms import UserCreationForm, PasswordChangeForm
 from django.contrib.auth import login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required, user_passes_test
