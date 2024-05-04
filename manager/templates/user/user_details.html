@@ -65,6 +65,7 @@
                 <a href="{% url 'delete_user' user.id %}" class="btn btn-sm btn-danger" onclick="return confirmAction('Delete User');">Delete User</a>
             </div>
         </div>
+        <a href="{% url "all_users" %}" class="btn btn-sm btn-light m-5 w-auto"> <i class="bi bi-arrow-left-short"></i> all members </a>
     </div>
 
 {% endblock content %}
