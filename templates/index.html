@@ -1,31 +1,39 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load static %}
-
 {% block header %}
-  {% include 'navbar.html' with active_page='home' %}
-{% endblock %}
-
+  {% include "navbar.html" with active_page="home" %}
+{% endblock header %}
 {% block content %}
-  <div class="container">
+  <div class="container mb-5">
     <div id="bodyContent" class="d-flex align-items-center">
       <div class="row align-items-center">
         <div class="col-12 col-lg-8">
           <div class="p-2">
-            <p class="display-6 fs-3 maintextColor">Discover, Read, Borrow</p>
-            <h1 class="fw-bolder display-3 maintextColor">Unlock the Magic of Reading</h1>
-            <div class="horizontalBar my-4"></div>
+            <p class="display-6 fs-3 maintextColor">
+              Discover our curated collection to
+            </p>
+            <h1 class="fw-bolder display-3 maintextColor">
+              Unlock the Magic of Reading
+            </h1>
+            <div class="horizontalBar my-4">
+            </div>
             <p class="maintextColor fw-medium">
-                Experience the enchantment of reading as you explore, immerse, and borrow from our diverse collection, 
-                where every page holds the promise of enlightenment.
+              Experience the enchantment of reading as you explore, immerse, and borrow from our diverse collection,
+              where every page holds the promise of enlightenment.
             </p>
           </div>
         </div>
         <div class="col-12 col-lg-4 text-lg-center">
           <div class="p-2 text-center">
-            <img class="w-100" src="{% static 'images/library.png' %}" alt="library-illustrator" />
+            <img class="w-100"
+                 src="{% static 'images/library.png' %}"
+                 alt="library-illustrator"
+                 width="100%"
+                 height="100%" />
           </div>
         </div>
       </div>
     </div>
+    <a href="{% url "all_books" %}" class="btn btn-lg btn-outline-dark"> <i class="bi bi-arrow-up-right-circle"></i> Browse Catalogue </a>
   </div>
-{% endblock %}
+{% endblock content %}

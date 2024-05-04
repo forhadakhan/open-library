@@ -1,16 +1,25 @@
+# catalogue/views.py
+
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib import messages
 from django.core.paginator import Paginator
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponseBadRequest
 from django.db.models import Avg, Q, F
-from .utils import dashboard_menu_options
-from .models import *
-from .forms import *
+from .models import Book, FavoriteBook, Review
+from .forms import BookForm
+from .utils import dashboard_menu_options, validate_rating
 
 
-# Create your views here.
+# Views
+
 def catalogue(request):
+    """
+    Renders the catalogue index page.
+
+    Returns:
+        HttpResponse: The rendered catalogue index page.
+    """
     menu_options = dashboard_menu_options
     return render(request, "catalogue/index.html", {'menu_options': menu_options})
 
@@ -18,6 +27,12 @@ def catalogue(request):
 @login_required
 @user_passes_test(lambda u: u.is_staff or u.is_superuser, login_url='/home/user/restricted/')
 def add_book(request):
+    """
+    Handles the addition of a new book.
+
+    Returns:
+        HttpResponse: The rendered book addition page.
+    """
     if request.method == 'POST':
         form = BookForm(request.POST, request.FILES)
         if form.is_valid():
@@ -32,8 +47,13 @@ def add_book(request):
     return render(request, 'catalogue/book_add.html', {'form': form})
 
 
-
 def all_books(request):
+    """
+    Renders the page displaying all books.
+
+    Returns:
+        HttpResponse: The rendered page displaying all books.
+    """
     # Get sorting parameters from the request
     sort_by = request.GET.get('sort_by', 'default')  # Default sorting option
     order_by = request.GET.get('order_by', 'asc')  # Default order: ascending
@@ -53,7 +73,7 @@ def all_books(request):
     if order_by == 'desc':
         sort_field = F(sort_field).desc()
 
-    # Get all books queryset with rating  
+    # Get all books queryset with rating
     all_books_list = Book.objects.annotate(overall_rating=Avg('review__rating'))
 
     # Sort the queryset based on the selected sorting option
@@ -72,7 +92,7 @@ def all_books(request):
     paginator = Paginator(all_books_list, 15)  # Show 15 books per page
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    
+
     return render(request, 'catalogue/books.html', {
         'page_obj': page_obj,
         'sort_by': sort_by,
@@ -80,13 +100,17 @@ def all_books(request):
     })
 
 
-
-
 def search_books(request):
+    """
+    Renders the page displaying search results for books.
+
+    Returns:
+        HttpResponse: The rendered page displaying search results for books.
+    """
     query = request.GET.get('q')
     if query is None:
         return redirect('all_books')
-    
+
     if query:
         books = Book.objects.filter(
             Q(title__icontains=query) |
@@ -103,8 +127,13 @@ def search_books(request):
     return render(request, 'catalogue/search.html', {'page_obj': page_obj, 'query': query})
 
 
-
 def book_detail(request, book_id):
+    """
+    Renders the page displaying details of a specific book.
+
+    Returns:
+        HttpResponse: The rendered page displaying details of a specific book.
+    """
     book = get_object_or_404(Book, pk=book_id)
     rating_range = range(1, 6)  # range from 1 to 5
     is_favorite = False
@@ -115,9 +144,9 @@ def book_detail(request, book_id):
         # Check if the book is in the user's favorites
         is_favorite = FavoriteBook.objects.filter(user=request.user, book=book).exists()
     return render(request, 'catalogue/book_detail.html', {
-        'book': book, 
-        'is_favorite': is_favorite, 
-        'reviews': reviews, 
+        'book': book,
+        'is_favorite': is_favorite,
+        'reviews': reviews,
         'rating_range': rating_range,
         'overall_rating': overall_rating,
     })
@@ -125,6 +154,12 @@ def book_detail(request, book_id):
 
 @login_required
 def add_favorite_book(request, book_id):
+    """
+    Adds a book to the user's favorites.
+
+    Returns:
+        HttpResponse: Redirects to the book detail page.
+    """
     try:
         existing_favorite = FavoriteBook.objects.get(user=request.user, book_id=book_id)
         messages.info(request, 'Book is already in your favorites!')
@@ -137,6 +172,12 @@ def add_favorite_book(request, book_id):
 
 @login_required
 def remove_favorite_book(request, book_id):
+    """
+    Removes a book from the user's favorites.
+
+    Returns:
+        HttpResponse: Redirects to the book detail page.
+    """
     try:
         favorite_book = FavoriteBook.objects.get(user=request.user, book_id=book_id)
         favorite_book.delete()
@@ -148,6 +189,12 @@ def remove_favorite_book(request, book_id):
 
 @login_required
 def add_review(request, book_id):
+    """
+    Adds a review for a book.
+
+    Returns:
+        HttpResponse: Redirects to the book detail page.
+    """
     if request.method == 'POST':
         book = get_object_or_404(Book, pk=book_id)
         rating = request.POST.get('rating')
@@ -155,9 +202,7 @@ def add_review(request, book_id):
 
         # Validate the rating
         try:
-            rating = int(rating)
-            if rating < 1 or rating > 5:
-                raise ValueError("Rating must be between 1 and 5")
+            rating = validate_rating(rating)
         except ValueError as e:
             return HttpResponseBadRequest("Invalid rating")
 
@@ -172,20 +217,32 @@ def add_review(request, book_id):
 
 @login_required
 def delete_review(request, review_id):
+    """
+    Deletes a review.
+
+    Returns:
+        HttpResponse: Redirects to the book detail page.
+    """
     review = get_object_or_404(Review, pk=review_id)
-    
+
     # Check if the request user is the owner of the review or is a superuser
     if request.user == review.user or request.user.is_superuser:
         review.delete()
         messages.success(request, 'Review deleted successfully.')
     else:
         messages.error(request, 'You are not authorized to delete this review.')
-    
+
     return redirect('book_detail', book_id=review.book.id)
 
 
 @login_required
 def favorite_books(request):
+    """
+    Renders the page displaying the user's favorite books.
+
+    Returns:
+        HttpResponse: The rendered page displaying the user's favorite books.
+    """
     favorite_books_list = FavoriteBook.objects.filter(user=request.user)
     paginator = Paginator(favorite_books_list, 15)  # Show  15 favorite books per page
 

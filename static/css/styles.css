@@ -1,5 +1,5 @@
 html {
-    height: 100%;
+    min-height: 100%;
     font-family: 'Inter', sans-serif;
 }
 
@@ -37,9 +37,9 @@ body {
 
 .disable-option a {
     pointer-events: none;
-    background-color: #5ca3fa; 
+    background-color: #5ca3fa;
     color: azure;
-}   
+}
 
 #bodyContent {
     min-height: calc(100vh - 77px)
@@ -71,4 +71,8 @@ body {
 
 .cursor-pointer {
     cursor: pointer;
+}
+
+.mh-100 {
+    min-height: 100vh;
 }

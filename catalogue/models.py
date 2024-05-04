@@ -5,6 +5,22 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 
 
 class Book(models.Model):
+    """
+    Represents a book in the system.
+
+    Attributes:
+        title (str): The title of the book.
+        author (str): The author(s) of the book.
+        genre (str): The genre of the book.
+        description (str, optional): A description of the book. Defaults to empty string.
+        cover_image (CloudinaryField, optional): The cover image of the book. Defaults to None.
+        publication_date (DateField, optional): The publication date of the book. Defaults to None.
+        upload_date (DateTimeField): The date and time when the book record was created.
+        isbn (str, optional): The International Standard Book Number (ISBN) of the book. Defaults to None.
+
+    Methods:
+        __str__: Returns a string representation of the book instance.
+    """
     title = models.CharField(max_length=255)
     author = models.CharField(max_length=255)
     genre = models.CharField(max_length=100)
@@ -15,19 +31,56 @@ class Book(models.Model):
     isbn = models.CharField(max_length=13, unique=True, blank=True, null=True)
 
     def __str__(self):
+        """
+        Returns a string representation of the book instance.
+
+        Returns:
+            str: The title of the book.
+        """
         return self.title
 
 
 class FavoriteBook(models.Model):
+    """
+    Represents a favorite book saved by a user.
+
+    Attributes:
+        user (ForeignKey): The user who saved the book.
+        book (ForeignKey): The book that was saved.
+        saved_date (DateTimeField): The date and time when the book was saved.
+
+    Methods:
+        __str__: Returns a string representation of the favorite book instance.
+    """
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     book = models.ForeignKey('Book', on_delete=models.CASCADE)
     saved_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
+        """
+        Returns a string representation of the favorite book instance.
+
+        Returns:
+            str: A formatted string indicating the saved book's title and the user who saved it.
+        """
         return f"Saved book '{self.book.title}' by {self.user.username}"
 
 
 class Review(models.Model):
+    """
+    Represents a review of a book by a user.
+
+    Attributes:
+        user (ForeignKey): The user who wrote the review.
+        book (ForeignKey): The book being reviewed.
+        rating (int): The rating given to the book, ranging from 0 to 5.
+        comment (str): The comment or review text.
+        created_at (DateTimeField): The date and time when the review was created.
+        updated_at (DateTimeField): The date and time when the review was last updated.
+
+    Methods:
+        __str__: Returns a string representation of the review instance.
+    """
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
     rating = models.IntegerField(validators=[MinValueValidator(0), MaxValueValidator(5)])
@@ -36,6 +89,12 @@ class Review(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
+        """
+        Returns a string representation of the review instance.
+
+        Returns:
+            str: A formatted string indicating the book title and the user who wrote the review.
+        """
         return f"Review for '{self.book.title}' by {self.user.username}"
 
 

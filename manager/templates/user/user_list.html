@@ -16,7 +16,7 @@
         <h1 class="h4 text-center border-bottom mb-4 pb-4 maintextColor">
             All Users
         </h1>
-        <form class="mb-4" method="get" action="{% url 'user_list' %}">
+        <form class="mb-4" method="get" action="{% url 'all_users' %}">
             <div class="input-group">
                 <input type="text"
                        class="form-control border"
@@ -26,7 +26,7 @@
                 <button class="btn btn-secondary border" type="submit">
                     Search
                 </button>
-                <a href="{% url 'user_list' %}" class="btn btn-outline-dark border">Clear</a>
+                <a href="{% url 'all_users' %}" class="btn btn-outline-dark border">Clear</a>
             </div>
         </form>
         <div class="row gap-3 mx-auto">
