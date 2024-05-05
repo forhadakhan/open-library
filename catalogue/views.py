@@ -52,6 +52,39 @@ def add_book(request):
 
 @login_required
 @user_passes_test(lambda u: u.is_staff or u.is_superuser, login_url='/home/user/restricted/')
+def edit_book(request, book_id):
+    """
+    Handle the editing of book details.
+
+    Args:
+        request: HTTP request object.
+        book_id (int): The ID of the book to edit.
+
+    Returns:
+        HttpResponse: Rendered template for editing book details.
+        HttpResponseRedirect: Redirects to the book detail page after successful editing.
+        Http404: If the requested book does not exist.
+    """
+    # Retrieve the book object to edit, or raise a 404 error if not found
+    book = get_object_or_404(Book, id=book_id)
+
+    if request.method == 'POST':
+        # If the request method is POST, process form submission
+        form = BookForm(request.POST, request.FILES, instance=book)
+        if form.is_valid():
+            # If form data is valid, save the changes and redirect to book detail page
+            form.save()
+            return redirect('book_detail', book_id=book_id)
+    else:
+        # If the request method is GET, display the form with current book data
+        form = BookForm(instance=book)
+
+    # Render the template with the form and book object
+    return render(request, 'catalogue/edit_book.html', {'form': form, 'book': book})
+
+
+@login_required
+@user_passes_test(lambda u: u.is_staff or u.is_superuser, login_url='/home/user/restricted/')
 def delete_book(request, book_id):
     """
     Handles the deletion of a book.

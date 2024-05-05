@@ -61,59 +61,6 @@
                    class="btn btn-sm btn-outline-primary border">Add to Favorites</a>
               </div>
             {% endif %}
-            {% if user.is_staff %}
-              <!-- Button trigger Delete Confirmation Modal -->
-              <button type="button"
-                      class="btn btn-sm btn-outline-danger border "
-                      data-bs-toggle="modal"
-                      data-bs-target="#staticBackdropDeleteBook">
-                <i class="bi bi-trash3"></i> Delete
-              </button>
-              <!-- Delete Confirmation Modal -->
-              <div class="modal fade"
-                   id="staticBackdropDeleteBook"
-                   data-bs-backdrop="static"
-                   data-bs-keyboard="false"
-                   tabindex="-1"
-                   aria-labelledby="staticBackdropDeleteBookLabel"
-                   aria-hidden="true">
-                <div class="modal-dialog">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <h1 class="modal-title fs-5 text-danger"
-                          id="staticBackdropDeleteBookLabel">
-                        Delete Book
-                      </h1>
-                      <button type="button"
-                              class="btn-close"
-                              data-bs-dismiss="modal"
-                              aria-label="Close">
-                      </button>
-                    </div>
-                    <div class="modal-body">
-                      <p>
-                        Are you sure you want to delete <strong>{{ book.title }}</strong> ?
-                      </p>
-                      <small class="text-secondary">This action cannot be undone and will delete all associated reviews.</small>
-                    </div>
-                    <div class="modal-footer">
-                      <button type="button"
-                              class="btn btn-sm btn-outline-secondary"
-                              data-bs-dismiss="modal">
-                        Cancel
-                      </button>
-                      {% comment %} confirm delete request {% endcomment %}
-                      <form action="{% url 'delete_book' book.id %}" method="post">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-sm btn-danger">
-                          Confirm Delete
-                        </button>
-                      </form>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            {% endif %}
             <div class="table-responsive">
               <table class="table border-top my-2">
                 <tbody>
@@ -179,6 +126,66 @@
                   </tr>
                 </tbody>
               </table>
+            </div>
+            <div class="my-2">
+              {% if user.is_staff %}
+                <!-- Button trigger Delete Confirmation Modal -->
+                <button type="button"
+                        class="btn btn-sm btn-danger border "
+                        data-bs-toggle="modal"
+                        data-bs-target="#staticBackdropDeleteBook">
+                  <i class="bi bi-trash3"></i> Delete
+                </button>
+                <!-- Delete Confirmation Modal -->
+                <div class="modal fade"
+                     id="staticBackdropDeleteBook"
+                     data-bs-backdrop="static"
+                     data-bs-keyboard="false"
+                     tabindex="-1"
+                     aria-labelledby="staticBackdropDeleteBookLabel"
+                     aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h1 class="modal-title fs-5 text-danger"
+                            id="staticBackdropDeleteBookLabel">
+                          Delete Book
+                        </h1>
+                        <button type="button"
+                                class="btn-close"
+                                data-bs-dismiss="modal"
+                                aria-label="Close">
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        <p>
+                          Are you sure you want to delete <strong>{{ book.title }}</strong> ?
+                        </p>
+                        <small class="text-secondary">This action cannot be undone and will delete all associated reviews.</small>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button"
+                                class="btn btn-sm btn-outline-secondary"
+                                data-bs-dismiss="modal">
+                          Cancel
+                        </button>
+                        {% comment %} confirm delete request {% endcomment %}
+                        <form action="{% url 'delete_book' book.id %}" method="post">
+                          {% csrf_token %}
+                          <button type="submit" class="btn btn-sm btn-danger">
+                            Confirm Delete
+                          </button>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- Link to edit boook -->
+                <a href="{% url 'edit_book' book.id %}"
+                   class="btn btn-sm btn-dark border ">
+                  <i class="bi bi-pen"></i> Edit
+                </a>
+              {% endif %}
             </div>
           </div>
         </div>

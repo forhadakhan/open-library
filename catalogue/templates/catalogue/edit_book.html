@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load static %}
+{# Load the tag library #}
+{% load django_bootstrap5 %}
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% block title %}
+    Edit/Update Book
+{% endblock title %}
+{% block header %}
+  {% include "navbar.html" with active_page="edit_book" %}
+{% endblock header %}
+{% block content %}
+  <section class="mx-auto my-5 px-2 py-5 width-40">
+    <div class="mb-4 py-2 border-bottom">
+      <h1 class="h4 text-center pb-4 maintextColor">
+        Edit Book
+      </h1>
+    </div>
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      {% bootstrap_form form %}
+      <div class="mb-3">
+        {% if book.cover_image.url %}
+          <img src="{{ book.cover_image.url }}" alt="Current Cover Image" width="100" height="auto">
+        {% endif %}
+      </div>
+      <button type="submit" class="btn btn-sm btn-primary mx-auto">
+        Save Changes
+      </button>
+    </form>
+  </section>
+{% endblock content %}

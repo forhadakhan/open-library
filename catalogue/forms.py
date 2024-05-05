@@ -23,7 +23,7 @@ class BookForm(ModelForm):
     
     class Meta:
         model = Book
-        fields = ['title', 'author', 'genre', 'description', 'cover_image', 'publication_date', 'isbn']
+        fields = ['title', 'author', 'genre', 'description', 'publication_date', 'isbn', 'cover_image']
         widgets = {
             'publication_date': forms.DateInput(attrs={'type': 'date'})
         }
