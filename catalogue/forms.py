@@ -28,24 +28,3 @@ class BookForm(ModelForm):
             'publication_date': forms.DateInput(attrs={'type': 'date'})
         }
 
-
-# django_app/forms.py
-# from django.forms import ModelForm     
-# from cloudinary.forms import CloudinaryFileField
-# from .models import Photo
-
-# class PhotoForm(ModelForm):
-#     image = CloudinaryFileField()
-
-#     class Meta:
-#         model = Photo
-#         # Remove the Django image field when integrating Cloudinary
-#         # fields = ['image']
-#         fields = '__all__'
-
-#     def __init__(self, *args, **kwargs):
-#        super().__init__(*args, **kwargs)
-#        self.fields['image'].options={
-#            'tags': 'new_image',
-#            'format': 'png'
-#     }
