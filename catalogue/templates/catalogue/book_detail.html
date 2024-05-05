@@ -25,9 +25,9 @@
         <div class="col-sm-4 col-md-3">
           <div class="card-img p-2 w-100 mx-auto">
             <div>
-              {% load cloudinary %}
               {% if book.cover_image %}
-                {% cloudinary book.cover_image width=200 height=320 %}
+                {% load cloudinary %}
+                {% cloudinary book.cover_image width=200 height=320 quality='auto' crop='pad' background='gen_fill:ignore-foreground_true' %}
               {% else %}
                 <!-- Default placeholder image -->
                 <img src="{% static "images/open-library-cover.webp" %}" alt="Open Library Placeholder Cover" width=200 height=320 />

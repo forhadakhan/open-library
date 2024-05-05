@@ -30,10 +30,10 @@
                         <div class="book-card__cover">
                             <div class="book-card__book">
                                 <div class="book-card__book-front">
-                                    <div class="book-card__img">              
-                                        {% load cloudinary %}
-                                        {% if favorite_book.book.cover_image %}
-                                            {% cloudinary favorite_book.book.cover_image %}
+                                    <div class="book-card__img">   
+                                        {% if favorite_book.book.cover_image %}           
+                                            {% load cloudinary %}
+                                            {% cloudinary favorite_book.book.cover_image quality='auto' crop='pad' background='gen_fill:ignore-foreground_true' %}
                                         {% else %}
                                             <!-- Default placeholder image -->
                                             <img src="{% static "images/open-library-cover.webp" %}" alt="Open Library Placeholder Cover" width="auto" height="auto">
