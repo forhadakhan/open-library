@@ -29,6 +29,9 @@ def catalogue(request):
 def add_book(request):
     """
     Handles the addition of a new book.
+    
+    Args:
+        request: HTTP request object.
 
     Returns:
         HttpResponse: The rendered book addition page.
@@ -45,6 +48,27 @@ def add_book(request):
         form = BookForm()
 
     return render(request, 'catalogue/book_add.html', {'form': form})
+
+
+@login_required
+@user_passes_test(lambda u: u.is_staff or u.is_superuser, login_url='/home/user/restricted/')
+def delete_book(request, book_id):
+    """
+    Handles the deletion of a book.
+
+    Args:
+        request: HTTP request object.
+        book_id (int): The ID of the book to delete.
+
+    Returns:
+        HttpResponse: Rendered template with confirmation of book deletion.
+        HttpResponseRedirect: Redirects to the book list page after successful deletion.
+        Http404: If the requested book does not exist.
+    """
+    book = get_object_or_404(Book, id=book_id)
+    if request.method == 'POST':
+        book.delete()
+        return redirect('all_books')
 
 
 def all_books(request):
