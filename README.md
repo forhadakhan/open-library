@@ -7,10 +7,10 @@ Open Library is a Django demonstration project showcasing how Django can be used
 
 ## Features
 
-### Authentication and Authorization    
-- Anyone can register a new account.     
-- Uses Django's built-in authentication system.
+### Authentication and Authorization     
+- System uses Django's built-in authentication system.
 - Permissions are set based on user type to restrict access to certain views and functionalities.   
+- Anyone can register a new account.    
 - User can login using the username or email.  
 - Reset password through email.  
 
